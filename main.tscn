@@ -1,0 +1,119 @@
+[gd_scene load_steps=9 format=3 uid="uid://drb6cpyi05wjv"]
+
+[ext_resource type="Script" path="res://main.gd" id="1"]
+[ext_resource type="Script" path="res://srv.gd" id="2_o07cd"]
+[ext_resource type="Script" path="res://well.gd" id="2_p62c7"]
+[ext_resource type="Script" path="res://Button.gd" id="3_2g78o"]
+[ext_resource type="Script" path="res://SCM.gd" id="4_2arix"]
+[ext_resource type="Script" path="res://Button1.gd" id="4_tnide"]
+[ext_resource type="Script" path="res://sig_sub.gd" id="5_eabl7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vthgb"]
+size = Vector2(40, 30)
+
+[node name="scada" type="Node2D"]
+script = ExtResource("1")
+
+[node name="nw" type="Node" parent="."]
+script = ExtResource("2_o07cd")
+
+[node name="menu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1153.0
+offset_bottom = 81.0
+
+[node name="Button" type="Button" parent="menu"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 14.0
+offset_right = 150.0
+offset_bottom = 50.0
+text = "701"
+
+[node name="CheckButton" type="CheckButton" parent="menu"]
+layout_mode = 0
+offset_left = 1051.0
+offset_top = 25.0
+offset_right = 1095.0
+offset_bottom = 49.0
+
+[node name="A" type="Label" parent="menu"]
+layout_mode = 0
+offset_left = 1038.0
+offset_top = 25.0
+offset_right = 1052.0
+offset_bottom = 51.0
+text = "A"
+
+[node name="B" type="Label" parent="menu"]
+layout_mode = 1
+offset_left = 1095.0
+offset_top = 24.0
+offset_right = 1112.0
+offset_bottom = 50.0
+text = "B"
+
+[node name="701" type="Node2D" parent="."]
+script = ExtResource("2_p62c7")
+
+[node name="SCM001" type="Node2D" parent="701"]
+script = ExtResource("4_2arix")
+
+[node name="Button" type="Button" parent="701/SCM001"]
+offset_left = 531.0
+offset_top = 256.0
+offset_right = 634.0
+offset_bottom = 315.0
+script = ExtResource("4_tnide")
+
+[node name="GTV001" type="Node2D" parent="701"]
+script = ExtResource("4_2arix")
+
+[node name="sens_area" type="Area2D" parent="701/GTV001"]
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="701/GTV001/sens_area"]
+shape = SubResource("RectangleShape2D_vthgb")
+
+[node name="right" type="Polygon2D" parent="701/GTV001/sens_area"]
+modulate = Color(0.443137, 0.443137, 0.443137, 1)
+polygon = PackedVector2Array(20, -15, 20, 15, 0, 0)
+script = ExtResource("5_eabl7")
+
+[node name="Polygon2d" type="Polygon2D" parent="701/GTV001/sens_area"]
+modulate = Color(0.501961, 0.501961, 0.501961, 1)
+polygon = PackedVector2Array(0, 0, -20, -15, -20, 15)
+
+[node name="icon" type="Node2D" parent="701/GTV001"]
+
+[node name="menu" type="Control" parent="701/GTV001"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="701/GTV001/menu"]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 189.0
+offset_right = 334.0
+offset_bottom = 241.0
+text = "hello"
+script = ExtResource("3_2g78o")
+
+[node name="hint" type="Control" parent="701/GTV001"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GraphNode" type="GraphNode" parent="701/GTV001/hint"]
+layout_mode = 0
+offset_left = 247.0
+offset_top = 13.0
+offset_right = 767.0
+offset_bottom = 194.0
+
+[connection signal="button_down" from="701/SCM001/Button" to="701/SCM001/Button" method="_on_button_button_down"]
+[connection signal="button_up" from="701/SCM001/Button" to="701/SCM001/Button" method="_on_button_button_up"]
+[connection signal="pressed" from="701/GTV001/menu/Button" to="701/GTV001/menu/Button" method="_on_button_pressed"]
