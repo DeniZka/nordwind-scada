@@ -25,5 +25,6 @@ func _on_button_button_down():
 
 
 func _on_exit_button_up():
+	Log.ext(User.user)
 	get_tree().change_scene_to_file("res://exit.tscn")
 	pass # Replace with function body.

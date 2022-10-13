@@ -121,7 +121,7 @@ func _process(delta):
 func _on_click_sens_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.button_mask == 0:
-			print(emit_signal(\"show_gtv_menu\", GID+\"GTV\"+index))
+			print(emit_signal(\"show_gtv_menu\", GID, index, vlvName))
 	pass # Replace with function body.
 
 

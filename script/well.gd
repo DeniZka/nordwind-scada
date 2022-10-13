@@ -18,10 +18,10 @@ func _ready():
 	set_meta("id", ID)
 	#create NordWind client
 	nw = NordWind.new()
-	nw.srvConnect(A_IP, A_PORT)
-	var init_res = nw.sendInitialization("my_diagram#default.conf")
-	if init_res[0] == 0:
-		print("initialization ok")
+	if nw.srvConnect(A_IP, A_PORT):
+		var init_res = nw.sendInitialization("my_diagram#default.conf")
+		if init_res[0] == 0:
+			print("initialization ok")
 #	print(nw.sendExec("touch /HELLOWORLD"))
 #	nw.srvDisconnect()
 	#serach for any singal subscribers
@@ -39,6 +39,8 @@ func _ready():
 	#register signal in nordwind
 	for s in pre_sigs:
 		nw.addVar(s)
+		
+	
 
 func subscribeRdSignal(id, sig):
 	#full signal name

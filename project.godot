@@ -50,8 +50,7 @@ file_logging/max_log_files=100
 
 [display]
 
-window/stretch/mode="canvas_items"
-window/stretch/aspect="keep_height"
+window/stretch/mode="viewport"
 
 [gui]
 

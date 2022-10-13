@@ -49,13 +49,20 @@ var ar_start_time = 0.0
 var ar_end_time = 0.0
 var ar_points = 0
 
-func srvConnect(ip: String, port = 22375):
+var timeout = 1000
+
+func srvConnect(ip: String, port = 22375, timeout = 1000):
+	self.timeout = timeout
 	cli = StreamPeerTCP.new()
 	#cli.set_no_delay ( true ) #???? need????
 	#seems no need to "no delay" to auto packet merging
 	var res = cli.connect_to_host(ip, port)
 	#wait connection
+	var ms = Time.get_ticks_msec()
 	while (cli.get_status() != cli.STATUS_CONNECTED):
+		if Time.get_ticks_msec() - ms >= timeout:
+			Log.log("Подключение к %s не удалось" % ip)
+			break
 		cli.poll()
 #	cli.big_endian = true
 		

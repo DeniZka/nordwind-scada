@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq1t10jn5po2q"]
+
+[ext_resource type="Script" path="res://script/VB.gd" id="1_7h41r"]
+
+[node name="left_menu" type="HBoxContainer"]
+offset_top = 152.0
+offset_right = 202.0
+offset_bottom = 495.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="VB" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2i(170, 343)
+offset_right = 180.0
+offset_bottom = 343.0
+size_flags_horizontal = 2
+size_flags_vertical = 4
+script = ExtResource("1_7h41r")
+
+[node name="exit" type="Button" parent="VB"]
+offset_right = 180.0
+offset_bottom = 31.0
+text = "Выход в меню"
+
+[node name="Button" type="Button" parent="VB"]
+offset_top = 35.0
+offset_right = 180.0
+offset_bottom = 89.0
+text = "Фонтанная арматура
+702"
+
+[node name="Button3" type="Button" parent="VB"]
+offset_top = 93.0
+offset_right = 180.0
+offset_bottom = 147.0
+text = "Подводный модуль
+управления 701"
+
+[node name="Button2" type="Button" parent="VB"]
+offset_top = 151.0
+offset_right = 180.0
+offset_bottom = 182.0
+text = "НМОГП 301"
+
+[node name="Button5" type="Button" parent="VB"]
+offset_top = 186.0
+offset_right = 180.0
+offset_bottom = 217.0
+text = "НМОЭП 201"
+
+[node name="Button" type="Button" parent="."]
+offset_left = 184.0
+offset_right = 202.0
+offset_bottom = 343.0
+text = "<"
+
+[connection signal="button_up" from="VB/exit" to="VB" method="_on_exit_button_up"]
+[connection signal="button_down" from="Button" to="VB" method="_on_button_button_down"]

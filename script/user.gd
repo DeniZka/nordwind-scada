@@ -40,7 +40,9 @@ func logIn(user, password):
 		if user_list[user] == hex:
 			self.user = user
 			self.role = i
+			Log.pwd(user, true)
 			return i  #return role	
+	Log.pwd(user, false)
 	return -1
 
 # Called when the node enters the scene tree for the first time.
