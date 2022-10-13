@@ -1,9 +1,9 @@
 extends Node2D
 
 @export var ID: String = "700"
-@export var A_IP: String = "192.168.100.11"
+@export var A_IP: String = "192.168.100.40"
 @export_range(0, 65535) var A_PORT = 22375
-@export var B_IP: String = "192.168.100.12"
+@export var B_IP: String = "192.168.100.41"
 @export_range(0, 65535) var B_PORT = 22375
 @export var Exchange_Timeout_Us = 1000
 @onready var nw: NordWind = null
@@ -18,11 +18,24 @@ func _ready():
 	set_meta("id", ID)
 	#create NordWind client
 	nw = NordWind.new()
+	nw.srvConnect(A_IP, A_PORT)
+	var init_res = nw.sendInitialization("my_diagram#default.conf")
+	if init_res[0] == 0:
+		print("initialization ok")
+#	print(nw.sendExec("touch /HELLOWORLD"))
+#	nw.srvDisconnect()
 	#serach for any singal subscribers
 	var nodes = get_tree().get_nodes_in_group("loop_rd")
 	for n in nodes:
 		for s in n.loop_rd:
 			n.loop_rd[s] = subscribeRdSignal(n.device, s)
+			
+	
+	var nl = get_tree().get_nodes_in_group("device")
+	for n in nl:
+		if n.has_method("setGlobalId"):
+			n.setGlobalId(str(name))
+	
 	#register signal in nordwind
 	for s in pre_sigs:
 		nw.addVar(s)

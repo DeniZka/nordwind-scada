@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmeka71kc33gk"]
+
+[ext_resource type="Script" path="res://script/dev_label.gd" id="1_h86ur"]
+
+[node name="Label" type="Polygon2D"]
+polygon = PackedVector2Array(-128, -32, 128, -32, 128, 32, -128, 32)
+script = ExtResource("1_h86ur")
+mode = "У"
+locked = true
+
+[node name="type" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+offset_left = -128.0
+offset_top = -32.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 44
+text = "GTV"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="mode" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+offset_top = -32.0
+offset_right = 64.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 44
+text = "У"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="lock" type="ColorRect" parent="."]
+offset_left = 64.0
+offset_top = -31.0
+offset_right = 128.0
+offset_bottom = 31.0
+color = Color(0.639216, 0.129412, 0.117647, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="caption" type="Line2D" parent="."]
+position = Vector2(0, 200)
+points = PackedVector2Array(128, -168, -128, -168, -128, -232, 128, -232, 128, -168)
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 1
+
+[node name="bar1" type="Line2D" parent="caption"]
+modulate = Color(0, 0, 0, 1)
+points = PackedVector2Array(0, -232, 0, -168)
+
+[node name="bar2" type="Line2D" parent="caption"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(64, 0)
+points = PackedVector2Array(0, -232, 0, -168)

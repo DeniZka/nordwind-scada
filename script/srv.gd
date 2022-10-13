@@ -20,9 +20,9 @@ func _ready():
 	srv = TCPServer.new()
 	srv.listen(22375, "192.168.31.54")
 	print("server started ", srv.is_listening())
-	var t = Thread.new()
-	t.start(Callable(self, "thrd"))
-	print("thread is ", t.is_started())
+#	var t = Thread.new()
+#	t.start(Callable(self, "thrd"))
+#	print("thread is ", t.is_started())
 	pass # Replace with function body.
 
 

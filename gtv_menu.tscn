@@ -1,0 +1,223 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo46rpmvl35gp"]
+
+[ext_resource type="Script" path="res://script/gtv_menu.gd" id="1_cu3ey"]
+[ext_resource type="PackedScene" uid="uid://bona8hf5t252s" path="res://gtv_img.tscn" id="2_bhfh8"]
+[ext_resource type="PackedScene" uid="uid://cmeka71kc33gk" path="res://dev_label.tscn" id="3_8klhx"]
+
+[node name="GTV_menu" type="Control"]
+custom_minimum_size = Vector2i(600, 400)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
+script = ExtResource("1_cu3ey")
+
+[node name="Pfull_hider" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2i(600, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBhead_body" type="VBoxContainer" parent="Pfull_hider"]
+modulate = Color(0.972549, 0.972549, 0.972549, 1)
+custom_minimum_size = Vector2i(600, 400)
+offset_left = 276.0
+offset_top = 124.0
+offset_right = 876.0
+offset_bottom = 524.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="Pfull_hider/VBhead_body"]
+offset_right = 600.0
+offset_bottom = 26.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/PanelContainer"]
+offset_right = 600.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "GTV(ID)"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Pfull_hider/VBhead_body/PanelContainer"]
+visible = false
+offset_left = 582.0
+offset_right = 600.0
+offset_bottom = 31.0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body"]
+offset_top = 30.0
+offset_right = 600.0
+offset_bottom = 400.0
+size_flags_vertical = 3
+
+[node name="rule" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer"]
+offset_right = 197.0
+offset_bottom = 370.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ColorRect" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/rule"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 197.0
+offset_bottom = 34.0
+color = Color(0.533333, 0.533333, 0.533333, 1)
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/rule/ColorRect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Настройки"
+horizontal_alignment = 1
+
+[node name="ColorRect2" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/rule"]
+offset_top = 34.0
+offset_right = 197.0
+offset_bottom = 370.0
+size_flags_vertical = 3
+
+[node name="indic_and_ctl" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer"]
+offset_left = 201.0
+offset_right = 398.0
+offset_bottom = 370.0
+size_flags_horizontal = 3
+
+[node name="Indic" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl"]
+offset_right = 197.0
+offset_bottom = 159.0
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic"]
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 197.0
+offset_bottom = 34.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic/PanelContainer"]
+offset_top = 4.0
+offset_right = 197.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Индикация"
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic"]
+custom_minimum_size = Vector2i(0, 125)
+offset_top = 34.0
+offset_right = 197.0
+offset_bottom = 159.0
+
+[node name="Cadjust" type="Control" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic/PanelContainer2"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 98.0
+offset_top = 62.0
+offset_right = 98.0
+offset_bottom = 62.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GTVimg" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic/PanelContainer2/Cadjust" instance=ExtResource("2_bhfh8")]
+position = Vector2(0, 35)
+scale = Vector2(0.35, 0.35)
+ValveName = "AMV"
+
+[node name="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/Indic/PanelContainer2/Cadjust/GTVimg" instance=ExtResource("3_8klhx")]
+position = Vector2(2.85718, -191.429)
+type = "AMV"
+mode = "Р"
+
+[node name="alarms" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl"]
+offset_top = 163.0
+offset_right = 197.0
+offset_bottom = 370.0
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/alarms"]
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 197.0
+offset_bottom = 34.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/alarms/Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ошибки"
+horizontal_alignment = 1
+
+[node name="ColorRect2" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/indic_and_ctl/alarms"]
+offset_top = 34.0
+offset_right = 197.0
+offset_bottom = 207.0
+size_flags_vertical = 3
+
+[node name="setups" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer"]
+offset_left = 402.0
+offset_right = 600.0
+offset_bottom = 370.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ColorRect" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/setups"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 198.0
+offset_bottom = 34.0
+color = Color(0.533333, 0.533333, 0.533333, 1)
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setups/ColorRect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Уставки"
+horizontal_alignment = 1
+
+[node name="ColorRect2" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/setups"]
+offset_top = 34.0
+offset_right = 198.0
+offset_bottom = 370.0
+size_flags_vertical = 3
+
+[connection signal="mouse_entered" from="." to="." method="_on_gtv_menu_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_gtv_menu_mouse_exited"]
+[connection signal="gui_input" from="Pfull_hider" to="." method="_on_pfull_hider_gui_input"]

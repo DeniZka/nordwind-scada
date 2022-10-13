@@ -7,10 +7,12 @@ var nw_stp_wr: NordWind = null #write setups connection
 var ip = "0.0.0.0"
 var port = 22375
 
+signal dev_sel
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	ID = get_parent().ID + str(name)
-	print("Fullid ", ID)
+	#print("Fullid ", ID)
 	add_to_group("clients")
 	nw_ctl = NordWind.new()
 	nw_stp_rd = NordWind.new()
@@ -58,3 +60,9 @@ func setServer(ip, port = 22375):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+
+func _on_sens_area_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			emit_signal("dev_sel", self)

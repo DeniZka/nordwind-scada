@@ -54,6 +54,12 @@ func srvConnect(ip: String, port = 22375):
 	#cli.set_no_delay ( true ) #???? need????
 	#seems no need to "no delay" to auto packet merging
 	var res = cli.connect_to_host(ip, port)
+	#wait connection
+	while (cli.get_status() != cli.STATUS_CONNECTED):
+		cli.poll()
+#	cli.big_endian = true
+		
+#	cli.set_no_delay ( true )
 #	print(res)
 	if res != OK:
 		print("can't connect to server")
@@ -63,6 +69,10 @@ func srvConnect(ip: String, port = 22375):
 		print("connected to server")
 		return true
 		
+func isStatusConnected():
+	cli.poll()
+	return (cli.get_status() == cli.STATUS_CONNECTED)
+
 func cleanSyncLists():
 		#clean up lists for resync after next conection
 		if not rdsigs_old.is_empty():
@@ -121,13 +131,17 @@ func _sendStdStrCmd(s, op):
 	var data = PackedByteArray()
 	var offset = 0
 	
+	const ID_SIZE = 4
+	
 	#no string size
-	var pre_size = HEADER_SIZE + OP_SIZE + LEN_SIZE
+	var pre_size = HEADER_SIZE + OP_SIZE + ID_SIZE + LEN_SIZE
 	data.resize(pre_size)
 
 	offset += HEADER_SIZE;
 	data.encode_u8(offset, op)
 	offset += OP_SIZE
+	data.encode_u32(offset, 0)
+	offset += ID_SIZE
 	data.encode_u32(offset, s.length())
 	offset += LEN_SIZE
 	#attach string buffer size
@@ -136,13 +150,20 @@ func _sendStdStrCmd(s, op):
 	data.encode_u32(0, data.size() - HEADER_SIZE)
 	#send
 	cli.put_data(data)
+	print(data)
+	
+#	while cli.get_available_bytes() <= 0:
+	cli.poll()
+	print("available: ", cli.get_available_bytes(), " bytes")
 
 	
 	var res_l = cli.get_u32()
+	print("result_len: ", res_l)
 	return cli.get_data(res_l)[1]
 	
-func sendExec(s):
+func sendExec(s: String):
 	var res: PackedByteArray = _sendStdStrCmd(s, DAT_EXEC)
+	print("result")
 	if res.size() != 5:
 		print("response len error")
 	#result and CRC
@@ -150,10 +171,45 @@ func sendExec(s):
 	
 #algo = <algo-name>#<config-name> Example: algo1#default.conf
 func sendInitialization(algo: String):
-	var res: PackedByteArray = _sendStdStrCmd(algo, DAT_INITIALIZE)
-	if res.size() != 5:
-		print("response len error")
+	if not srvConnected():
+		return null
+	
+	const LEN_SIZE = 4
+	var size = 0
+	var data = PackedByteArray()
+	var offset = 0
+	
+	const ID_SIZE = 4
+	
+	#no string size
+	var pre_size = HEADER_SIZE + OP_SIZE + ID_SIZE + LEN_SIZE
+	data.resize(pre_size)
+
+	offset += HEADER_SIZE;
+	data.encode_u8(offset, DAT_INITIALIZE)
+	offset += OP_SIZE
+	data.encode_u32(offset, -1)
+	offset += ID_SIZE
+	data.encode_u32(offset, algo.length())
+	offset += LEN_SIZE
+	#attach string buffer size
+	data += algo.to_ascii_buffer()
+	#real size
+	data.encode_u32(0, data.size() - HEADER_SIZE)
+	#send
+	cli.put_data(data)
+	print(data)
+	
+	print("available: ", cli.get_available_bytes(), " bytes")
+
+	var res_l = cli.get_u32()
+	if res_l != 5:
+		print("Nordwind connection Initialization Error")
+		return [-1, -1]
+	var res: PackedByteArray = cli.get_data(res_l)[1]
+	print("Initia", res)
 	#error and CRC
+	
 	return [res.decode_u8(0), res.decode_u32(1)]
 	
 func findRdSignal(sname):

@@ -9,17 +9,23 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "Polygon2D",
+"class": &"DevLabel",
+"language": &"GDScript",
+"path": "res://script/dev_label.gd"
+}, {
 "base": "Object",
 "class": &"NordWind",
 "language": &"GDScript",
-"path": "res://nw.gd"
+"path": "res://script/nw.gd"
 }, {
 "base": "Object",
 "class": &"nwSignal",
 "language": &"GDScript",
-"path": "res://nwSignal.gd"
+"path": "res://script/nwSignal.gd"
 }]
 _global_script_class_icons={
+"DevLabel": "",
 "NordWind": "",
 "nwSignal": ""
 }
@@ -29,16 +35,23 @@ _global_script_class_icons={
 config/name="nordwind-scada"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.0")
+boot_splash/show_image=false
 config/icon="res://icon.png"
 
 [autoload]
 
-Log="*res://log.gd"
+Log="*res://script/log.gd"
+User="*res://script/user.gd"
 
 [debug]
 
 file_logging/enable_file_logging=true
 file_logging/max_log_files=100
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
 
 [gui]
 

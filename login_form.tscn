@@ -1,0 +1,94 @@
+[gd_scene load_steps=5 format=3 uid="uid://d2rdtx5du5dmq"]
+
+[ext_resource type="Script" path="res://script/Node2d.gd" id="1_m1qq4"]
+
+[sub_resource type="Animation" id="Animation_0hgdx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("wrong:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_yyn1p"]
+resource_name = "blink"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("wrong:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3gw0x"]
+_data = {
+"RESET": SubResource("Animation_0hgdx"),
+"blink": SubResource("Animation_yyn1p")
+}
+
+[node name="login_form" type="Node2D"]
+position = Vector2(312, 208)
+script = ExtResource("1_m1qq4")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2i(308, 137)
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 296.0
+offset_bottom = 120.0
+
+[node name="user" type="OptionButton" parent="."]
+offset_right = 272.0
+offset_bottom = 40.0
+
+[node name="epass" type="LineEdit" parent="."]
+offset_top = 56.0
+offset_right = 192.0
+offset_bottom = 96.0
+placeholder_text = "пароль"
+secret = true
+virtual_keyboard_enabled = false
+virtual_keyboard_type = 6
+draw_control_chars = true
+
+[node name="bender" type="Button" parent="."]
+offset_left = 200.0
+offset_top = 56.0
+offset_right = 272.0
+offset_bottom = 96.0
+text = "Войти"
+
+[node name="wrong" type="Label" parent="."]
+modulate = Color(1, 0, 0, 1)
+offset_left = 6.0
+offset_top = 95.0
+offset_right = 158.0
+offset_bottom = 121.0
+text = "Пароль не верный"
+
+[node name="ap" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3gw0x")
+}
+
+[node name="Label" type="Label" parent="."]
+offset_top = -32.0
+offset_right = 115.0
+offset_bottom = -6.0
+text = "Пользователь"
+
+[connection signal="text_submitted" from="epass" to="." method="_on_epass_text_submitted"]
+[connection signal="button_down" from="bender" to="." method="_on_bender_button_down"]

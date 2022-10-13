@@ -7,7 +7,8 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Log.log("------loading---done--------")
+	Log.log("---SCADA---loading---done--------")
+	$"701/GTVimg".setState($"701/GTVimg".ST_UNOPENED_PROC)
 	pass
 	#'''	
 	

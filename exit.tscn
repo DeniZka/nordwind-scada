@@ -1,0 +1,343 @@
+[gd_scene load_steps=10 format=3 uid="uid://dfxj26nq5kkya"]
+
+[ext_resource type="Script" path="res://script/exit.gd" id="1_3bew4"]
+[ext_resource type="PackedScene" uid="uid://vvtyqltrqowd" path="res://rocket.tscn" id="2_6ces1"]
+[ext_resource type="PackedScene" uid="uid://d2rdtx5du5dmq" path="res://login_form.tscn" id="3_0l1qd"]
+[ext_resource type="Texture2D" uid="uid://c48q6sg8hs1ih" path="res://assets/g335.png" id="4_yc601"]
+
+[sub_resource type="Animation" id="Animation_jeaio"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("rocket:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(576, 848)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("rocket:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.4, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("rocket/fire_right:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("rocket/fire_left:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1csa3"]
+resource_name = "fly"
+length = 15.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("rocket:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(576, 848), Vector2(576, 232)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("rocket:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(5, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("rocket/fire_right:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(7.9, 9.98527),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("rocket/fire_left:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(7.9, 9.98527),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("rocket/body/other:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 9.6, 11.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("rocket/fire_right:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("rocket/fire_left:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j571q"]
+_data = {
+"RESET": SubResource("Animation_jeaio"),
+"fly": SubResource("Animation_1csa3")
+}
+
+[sub_resource type="Animation" id="Animation_cwc4u"]
+resource_name = "words"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Name:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5, 3, 4, 4.5, 5.5, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.498039), Color(1, 1, 1, 0.498039), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.509804), Color(1, 1, 1, 0.509804), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Name:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": ["GEORGE LUCAS
+", "ARNOLD SCHWARZENEGGER"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("about:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.6, 1, 1.5, 3, 4.6, 5, 5.5, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.603922), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("about:text")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(-0.1, 0, 4, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Даже не ПРЕДСТАВЛЯЕТ что это", "даже  не ПРЕДСТАВЛЯЕТ что это такое ", "Не был приглашен на главную роль", "Даже не ПРЕДСТАВЛЯЕТ что это"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bjjyl"]
+_data = {
+"words": SubResource("Animation_cwc4u")
+}
+
+[node name="login" type="Node2D"]
+script = ExtResource("1_3bew4")
+
+[node name="bg" type="Polygon2D" parent="."]
+scale = Vector2(1, 1.17747)
+color = Color(0.0745098, 0.0745098, 0.0745098, 1)
+polygon = PackedVector2Array(0, 0, 1152, 0, 1152, 648, 0, 648)
+
+[node name="Npts-pilyugina" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(583, 936)
+
+[node name="Label" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0.631373)
+offset_left = 32.0
+offset_top = 888.0
+offset_right = 313.0
+offset_bottom = 1980.0
+text = "ТВОРЧЕСКИЙ КОЛЛЕКТИВ
+          АО \"НПЦАП\"
+
+-------------------------------------
+
+РУКОВОДИТЕЛЬ ПРОЕКТА:
+Симаков Максим Леонидович
+
+------------------------------------
+
+Главный разработчик 
+Гусев Андрей Андреевич
+
+------------------------------------
+
+Главный программист
+Безхмельнов Андрей Дмитриевич
+(aka Melno Drew)
+
+-------------------------------------
+
+разработчики-комплесники:
+Власенко Руслан
+Андрей
+Алексей
+Еще и еще
+
+--------------------------------------
+
+Разработчики-программисты:
+Безхмельнов Андрей Дмитриевич
+Баданин Денис Сергеевич
+Конев Андрей Дмитриевич
+Катерина 
+Беликов Денис
+Кто-то с отделения 02
+
+------------------------------------
+
+Разработчики-прибористы
+Кто-то из отделения 03
+Кто-то из однеления 02
+"
+
+[node name="rocket" parent="." instance=ExtResource("2_6ces1")]
+
+[node name="ap" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_j571q")
+}
+
+[node name="login_form" parent="." instance=ExtResource("3_0l1qd")]
+position = Vector2(834, 75)
+nextScene = "res://main.tscn"
+
+[node name="starz" type="CPUParticles2D" parent="."]
+position = Vector2(584, 0)
+amount = 30
+lifetime = 1.2
+emission_shape = 3
+emission_rect_extents = Vector2(600, 1)
+direction = Vector2(0, 1)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 341.7
+initial_velocity_max = 768.84
+
+[node name="words" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bjjyl")
+}
+
+[node name="Name" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0.203922)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = 200.0
+offset_right = 1142.0
+offset_bottom = 322.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 82
+text = "ARNOLD SCHWARZENEGGER"
+horizontal_alignment = 1
+
+[node name="about" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0.4)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 352.5
+offset_top = 322.5
+offset_right = 831.5
+offset_bottom = 367.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 30
+text = "Не был приглашен на главную роль"
+
+[node name="PointLight2d" type="PointLight2D" parent="."]
+
+[node name="G335" type="Sprite2D" parent="."]
+position = Vector2(1080.68, 606)
+scale = Vector2(0.419355, 0.419355)
+texture = ExtResource("4_yc601")
