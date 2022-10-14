@@ -79,9 +79,12 @@ script = ExtResource("4_tnide")
 [node name="GTVimg" parent="main_container/scada/701" instance=ExtResource("6_0hcol")]
 position = Vector2(515, 361)
 ValveName = "AMV"
+index = null
 
 [node name="Label" parent="main_container/scada/701/GTVimg" instance=ExtResource("7_bt4e0")]
 position = Vector2(5, -190)
+type = "AMV"
+mode = "Р"
 
 [node name="SCtaskBar" type="ScrollContainer" parent="main_container"]
 custom_minimum_size = Vector2i(894, 102)

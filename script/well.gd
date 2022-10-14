@@ -25,12 +25,12 @@ func _ready():
 #	print(nw.sendExec("touch /HELLOWORLD"))
 #	nw.srvDisconnect()
 	#serach for any singal subscribers
-	var nodes = get_tree().get_nodes_in_group("loop_rd")
+	var nodes = get_tree().get_nodes_in_group("signals")
 	for n in nodes:
 		for s in n.loop_rd:
 			n.loop_rd[s] = subscribeRdSignal(n.device, s)
 			
-	
+	#set self global id for devices
 	var nl = get_tree().get_nodes_in_group("device")
 	for n in nl:
 		if n.has_method("setGlobalId"):

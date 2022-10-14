@@ -14,7 +14,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://script/dev_label.gd"
 }, {
-"base": "Object",
+"base": "Node",
 "class": &"NordWind",
 "language": &"GDScript",
 "path": "res://script/nw.gd"
@@ -42,6 +42,7 @@ config/icon="res://icon.png"
 
 Log="*res://script/log.gd"
 User="*res://script/user.gd"
+Nw="*res://script/nw.gd"
 
 [debug]
 

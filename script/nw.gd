@@ -1,5 +1,7 @@
 class_name NordWind
-extends Object
+extends Node
+
+signal signalsUpdated
 
 enum {RS_WAIT_HEADER, RS_READ_BODY, RS_PARSE_DATA}
 enum {CMD_PAUSE=23, CMD_PLAY=25, CMD_KILL=15}
@@ -119,7 +121,7 @@ func srvDisconnect():
 func srvConnected():
 	if cli:
 		cli.poll()
-		if cli.get_status() == cli.STATUS_NONE:
+		if cli.get_status() != cli.STATUS_CONNECTED:
 			cli = null
 			cleanSyncLists()
 			return false
@@ -205,6 +207,7 @@ func sendInitialization(algo: String):
 	data.encode_u32(0, data.size() - HEADER_SIZE)
 	#send
 	cli.put_data(data)
+	data.clear()
 	print(data)
 	
 	print("available: ", cli.get_available_bytes(), " bytes")
@@ -250,6 +253,11 @@ func addVar(sig: nwSignal):
 		return true
 
 func rmVar(sig: nwSignal):
+	#FIXME: check by names
+	#check isgnal is invalid
+	if sig.VID == nwSignal.INVALID_SIGNAL:
+		return false
+		
 	if sig.direction == sig.DIR_READ:
 		if not sig in rdsigs: #check is not already synced
 			return false
@@ -302,7 +310,7 @@ func _sendSyncAdd(new, main):
 	data.clear()
 	
 	#now receive response and parce it 
-	return #FIXME: TOBE REMOVED WHEN TESTED
+#	return #FIXME: TOBE REMOVED WHEN TESTED
 	
 	l = cli.get_u32()
 	for s in new:
@@ -311,7 +319,11 @@ func _sendSyncAdd(new, main):
 		for i in range(3):
 			s.dims[i] = cli.get_u32()
 		s.resize()
-		s.VID = cli.get_u32()
+		if l > 13: #
+			s.VID = cli.get_u32()
+		else:
+			s.VID = -1
+			print(s.name, " has no VID")
 		
 	#organize lists
 	while not new.is_empty():
@@ -324,6 +336,7 @@ func _sendSyncAdd(new, main):
 		new.remove_at(0)
 	
 func _sendSyncRm(old, main):
+	#FIXME: function is useless cause of no VID mostly
 	var size = 0
 	var data = PackedByteArray()
 	var offset = 0
@@ -466,6 +479,38 @@ func sendExchnge():
 				for i in range(s.vals.size()):
 					s.vals[i] = cli.get_32()
 			#TODO: complete other signal types
+			
+	emit_signal("signalsUpdated")
+	
+func _findByName(sn: String, arr):
+	for s in arr:
+		if s.name == sn:
+			return s
+	return null
+	
+func signalsByDict(dev: String, sd, dir = nwSignal.DIR_READ):
+	for k in sd:
+		#get full signal string
+		#        701   GTV   001    _   open
+		var ss = dev + "_" + k
+		if dir == nwSignal.DIR_READ:
+			sd[k] = _findByName(ss, rdsigs)
+			if sd[k]:
+				continue
+			sd[k] = _findByName(ss, rdsigs_new)
+			if sd[k]:
+				continue
+		else:
+			sd[k] = _findByName(ss, wrsigs)
+			if sd[k]:
+				continue
+			sd[k] = _findByName(ss, wrsigs_new)
+			if sd[k]:
+				continue
+		#no signal found
+		var s = nwSignal.new(ss, dir)
+		addVar(s)
+		sd[k] = s
 	
 func sendSaveState(state_name):
 	var res: PackedByteArray = _sendStdStrCmd(state_name, DAT_SAVESTATE)
@@ -499,30 +544,25 @@ func sendGetAvailableVarList():
 	cli.put_data(data)
 	data.clear()
 	
-	return false #FIXME: remove
+#	return false #FIXME: remove
 	
 	var sigs = []
-	cli.get_u32()
+	var l = cli.get_u32()
 	var cnt = cli.get_u32()
 	for i in range(cnt):
 		var s = nwSignal.new()
 		var nl = cli.get_u8()
-		s.name = cli.get_string(nl)
+		s.name = cli.get_string(64)
 		nl = cli.get_u8()
-		s.caption = cli.get_string(nl)
+		s.caption = cli.get_string(128)  #FIXME CHANGE ENCODING
 		s.type = cli.get_u8()
-		var ds  = cli.get_u8()
-		for j in range(ds):
-			nl = cli.get_u32()
-			if j<=2:
-				s.dims[j] = nl
-			else:
-				print("extra dimensions!!")
+		var maxlen  = cli.get_u8()
+		for j in s.dims.size():
+			s.dims[j] = cli.get_u32()
 #		s.resize() #to match dims
 		s.io_mode = cli.get_u8()
 		s.classified = cli.get_u8()
 		sigs.append(s)
-		
 	return sigs
 	
 #ARCHIVE FUNCTIONS SECTION

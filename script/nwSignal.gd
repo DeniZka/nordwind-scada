@@ -64,3 +64,7 @@ func clear():
 	var VID = -1
 	#TODO: clear values
 	
+func getBool():
+	if vals.size() > 0:
+		return vals[0] > 0
+	

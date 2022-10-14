@@ -6,6 +6,7 @@
 script/source = "@tool
 extends Node2D
 
+@onready var nw: NordWind = NordWind.new()
 
 var vlvName = \"\"
 @export var ValveName = \"GTV\":
@@ -34,76 +35,78 @@ enum {MD_MANUAL, MD_REMOTE}
 signal show_gtv_menu 
 
 var GID = \"700\"
+const clr_open = Color.DARK_GREEN
+const clr_close = Color.ORANGE_RED
+const clr_unknown = Color.GRAY
+
+var signals = {
+	\"open_rem\": null,  #сигнал открытия дошел
+	\"close_rem\": null, #сигнал закрытия дошел
+	\"open\": null,      #открыт
+	\"closed\": null,    #акрыт
+	\"oc_alarm\": null,  #не открылся
+	\"pm_alarm\": null,  #не перерасход жидкости
+	\"remote\": null
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print(Nw)
+	if Nw:
+		Nw.connect(\"signalsUpdated\", Callable(self, \"signalsUpdated\"))
+		Nw.signalsByDict(self.GID + \"GTV\" + index, signals, nwSignal.DIR_READ)
+	
+	
+	if nw.srvConnect(\"192.168.100.40\", 32375):
+#		print(nw.sendInitialization(\"my_diagram#default.conf\"))
+#		var s: nwSignal = nwSignal.new(\"701GTV001_open\".to_lower(), nwSignal.DIR_WRITE)
+#		nw.addVar(s)
+#		nw.sendSyncVarList()
+		
+		nw.sendGetAvailableVarList()
+		nw.srvDisconnect()
+	
+	
 	if $Label:
 		$Label.type = \"AMV\"
-	setState(ST_UNKNOWN)
 	setMode(MD_MANUAL)
 	#signal
 	add_to_group(\"GTV\")
-	add_to_group(\"device\")
+	
+	add_to_group(\"device\") #setGlobalId
 	pass # Replace with function body.
 	
 func setGlobalId(gid):
 	GID = gid
 	pass
-
-func setState(state):
-	$Light.visible = false
-	not_opened.visible = false
-	not_closed.visible = false
-	match state:
-		ST_UNKNOWN:
-			$right.color = Color.GRAY
-			$left.color = Color.GRAY
-			$top.color = Color.GRAY
-		ST_OPEN:
-			$right.color = Color.DARK_GREEN
-			$left.color = Color.DARK_GREEN
-			$top.color = Color.DARK_GREEN
-		ST_CLOSE:
-			$right.color = Color.ORANGE
-			$left.color = Color.ORANGE
-			$top.color = Color.ORANGE
-		ST_OPENING:
-			$right.color = Color.GRAY
-			$left.color = Color.GRAY
-			$top.color = Color.DARK_GREEN
-		ST_CLOSING:
-			$right.color = Color.GRAY
-			$left.color = Color.GRAY
-			$top.color = Color.ORANGE
-		ST_UNOPENED_START:
-			$right.color = Color.ORANGE
-			$left.color = Color.ORANGE
-			$top.color = Color.DARK_GREEN
-			$Light.visible = true
-			not_opened.visible = true
-			#FIXME: error
-		ST_UNCLOSED_START:
-			$right.color = Color.DARK_GREEN
-			$left.color = Color.DARK_GREEN
-			$top.color = Color.ORANGE
-			$Light.visible = true
-			not_closed.visible = true
-			#FIXME: error
-		ST_UNOPENED_PROC:
-			$right.color = Color.GRAY
-			$left.color = Color.GRAY
-			$top.color = Color.DARK_GREEN
-			$Light.visible = true
-			not_opened.visible = true
-			#FIXME: error
-		ST_UNCLOSED_PROC:
-			$right.color = Color.GRAY
-			$left.color = Color.GRAY
-			$top.color = Color.ORANGE
-			$Light.visible = true
-			not_closed.visible = true
-			#FIXME: error
+	
+func signalsUpdated():
+	setMode(signals[\"remote\"].getBool())
 		
+	#check any of action is finished
+	if signals[\"open\"].getBool():
+		$right.color = clr_open
+		$left.color = clr_open
+	elif signals[\"closed\"].getBool():
+		$right.color = clr_close
+		$left.color = clr_close
+	else:
+		$right.color = Color.GRAY
+		$left.color = Color.GRAY
+	
+	#check no alarm (reset them)
+	if not signals[\"oc_alarm\"].getBool():
+		$Light.visible = false
+		not_opened.visible = false
+		not_closed.visible = false
+	else:
+		$Light.visible = true
+		if $top.color == clr_open:
+			not_opened.visible = true
+		if $top.color == clr_close:
+			not_closed.visible = true
+	
+
 func setMode(mode):
 	if has_node(\"Label\"):
 		if mode == MD_MANUAL:
@@ -191,6 +194,7 @@ mouse_filter = 2
 
 [node name="not_opened" type="Label" parent="unrotator/Control"]
 visible = false
+layout_mode = 0
 offset_left = -140.0
 offset_top = -44.9999
 offset_right = 156.0
@@ -202,6 +206,7 @@ vertical_alignment = 1
 
 [node name="not_closed" type="Label" parent="unrotator/Control"]
 visible = false
+layout_mode = 0
 offset_left = -140.0
 offset_top = -44.9999
 offset_right = 156.0
