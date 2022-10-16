@@ -64,7 +64,7 @@ func srvConnect(ip: String, port = 22375, timeout = 1000):
 	while (cli.get_status() != cli.STATUS_CONNECTED):
 		if Time.get_ticks_msec() - ms >= timeout:
 			Log.log("Подключение к %s не удалось" % ip)
-			break
+			return false
 		cli.poll()
 #	cli.big_endian = true
 		
