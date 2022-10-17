@@ -72,4 +72,22 @@ func clear():
 func getBool():
 	if vals.size() > 0:
 		return vals[0] > 0
+		
+func getFloat():
+	if vals.size() > 0:
+		return vals[0]
+		
+func setFloat(val):
+	if vals.size() > 0:
+		vals[0] = val
+		return true
+	else:
+		return false
+		
+func setBool(val):
+	if vals.size() > 0:
+		vals[0] = int(val)
+		return true
+	else:
+		return false
 	

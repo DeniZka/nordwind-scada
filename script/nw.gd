@@ -58,9 +58,15 @@ var ar_start_time = 0.0
 var ar_end_time = 0.0
 var ar_points = 0
 
-var timeout = 1000
+var timeout = 1000 #disconnection timout
+#this nordwind configuration
+var ip = "127.0.0.1"
+var port = 22375
+var init_algo = "my_diagram#default.conf"
 
 func srvConnect(ip: String, port = 22375, timeout = 1000):
+	self.ip = ip
+	self.port = port
 	self.timeout = timeout
 	cli = StreamPeerTCP.new()
 	#cli.set_no_delay ( true ) #???? need????
@@ -162,6 +168,7 @@ func sendExec(s: String):
 	
 #algo = <algo-name>#<config-name> Example: algo1#default.conf
 func sendInitialization(algo: String):
+	self.init_algo = algo
 	if not srvConnected():
 		return null
 	

@@ -5,7 +5,7 @@ extends Node2D
 @export_range(0, 65535) var A_PORT = 22375
 @export var B_IP: String = "192.168.100.41"
 @export_range(0, 65535) var B_PORT = 22375
-@export var Exchange_Timeout_s = 2
+@export var Exchange_Timeout_s = 1
 @export var Algorythm = "my_diagram"
 @export var Config = "default.conf"
 

@@ -73,8 +73,6 @@ func _ready():
 		nw.srvDisconnect()
 	\"\"\"
 	
-	if $Label:
-		$Label.type = \"AMV\"
 	setMode(MD_MANUAL)
 	#signal
 	add_to_group(\"GTV\")
@@ -111,6 +109,9 @@ func signalsUpdated():
 			not_opened.visible = true
 		if $top.color == clr_close:
 			not_closed.visible = true
+			
+	if has_node(\"Label\"):
+		$Label.locked = signals[\"interlock\"].getBool()
 	
 
 func setMode(mode):

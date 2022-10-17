@@ -14,9 +14,17 @@ var mode = MD_ENGINEER
 @onready var b_alarm = $Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/BAlarms
 @onready var b_lock = $Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/BLock
 @onready var b_ulock = $Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/HBUnlock
+#setup edits
+@onready var s_opensp = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer/SBopensp
+@onready var s_closedsp1 = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer2/SBclosedsp1
+@onready var s_low = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer3/SBlow
+@onready var s_topen = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer4/SBtopen
+@onready var s_tclose = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer5/SBtclose
+@onready var s_remote = $Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer6/SBremote
 
 var GID = "700"
 var index = "000"
+#multipurpose nordwind
 var nw: NordWind = null
 var global_rd = {
 	"interlock": null,
@@ -33,14 +41,16 @@ var ctl_wr_signals = {
 	"closed": null
 }
 
-var nw_setup: NordWind = null
-var setup_rd_signal = {
-	"password" = null
+var setup_signals = {
+	"remote": null,
+	"timer_open": null,
+	"timer_close": null,
+	"open_sp": null,
+	"closed_sp1": null,
+	"rl_check": null,
+	"fl_check": null,
+	"password": null
 }
-var setup_wr_signal = {
-	"password" = null
-}
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if Nw:
@@ -151,4 +161,44 @@ func _on_b_open_button_up():
 	nw.signalsByDict(GID+"GTV"+index, ctl_rd_signals, nwSignal.DIR_READ)
 	nw.signalsByDict(GID+"GTV"+index, ctl_wr_signals, nwSignal.DIR_WRITE)
 #	nw.connect()
+	pass # Replace with function body.
+
+
+func _on_b_setupwr_button_up():
+	Log.usr("Задание уставок для %s" % GID + "GTV" + index)
+	nw.signalsByDict(GID + "GTV" + index, setup_signals,  nwSignal.DIR_WRITE)
+	if nw.srvConnect(Nw.ip, Nw.port):
+#		Log.log("Подключение к серверу")
+		nw.sendInitialization(Nw.init_algo)
+		nw.sendSyncVarList()
+		setup_signals["timer_open"].setFloat(s_topen.value)
+		setup_signals["timer_open"].setFloat(s_tclose.value)
+		setup_signals["open_sp"].setFloat(s_opensp.value)
+		setup_signals["closed_sp1"].setFloat(s_closedsp1.value)
+		setup_signals["remote"].setBool(s_remote.button_pressed)
+		nw.sendExchnge()
+		nw.srvDisconnect()
+	
+	#TODO: write setups
+	pass # Replace with function body.
+
+func _on_b_setuprd_button_up():
+	Log.usr("Чтение уставок для %s" % GID + "GTV" + index)
+	nw.signalsByDict(GID + "GTV" + index, setup_signals,  nwSignal.DIR_READ)
+	if nw.srvConnect(Nw.ip, Nw.port):
+#		Log.log("Подключение к серверу")
+		nw.sendInitialization(Nw.init_algo)
+		nw.sendSyncVarList()
+		nw.sendExchnge()
+		for s in setup_signals:
+			print(setup_signals[s].vals)
+		nw.srvDisconnect()
+		
+		s_topen.value = setup_signals["timer_open"].getFloat()
+		s_tclose.value = setup_signals["timer_open"].getFloat()
+		s_opensp.value = setup_signals["open_sp"].getFloat()
+		s_closedsp1.value = setup_signals["closed_sp1"].getFloat()
+		s_remote.button_pressed = setup_signals["remote"].getBool()
+		#read vals
+	#TODO: read setups
 	pass # Replace with function body.
