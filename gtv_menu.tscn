@@ -18,7 +18,6 @@ script = ExtResource("1_cu3ey")
 
 [node name="Pfull_hider" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2i(600, 400)
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -28,7 +27,6 @@ grow_vertical = 2
 [node name="VBhead_body" type="VBoxContainer" parent="Pfull_hider"]
 modulate = Color(0.972549, 0.972549, 0.972549, 1)
 custom_minimum_size = Vector2i(699, 428)
-layout_mode = 2
 offset_left = 226.0
 offset_top = 110.0
 offset_right = 925.0
@@ -39,13 +37,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="Pfull_hider/VBhead_body"]
-layout_mode = 2
 offset_right = 699.0
 offset_bottom = 32.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/PanelContainer"]
 custom_minimum_size = Vector2i(0, 32)
-layout_mode = 2
 offset_right = 699.0
 offset_bottom = 32.0
 grow_horizontal = 2
@@ -55,45 +51,38 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body"]
-layout_mode = 2
 offset_top = 36.0
 offset_right = 699.0
 offset_bottom = 428.0
 size_flags_vertical = 3
 
 [node name="PanelContainer2" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer"]
-layout_mode = 2
 offset_right = 353.0
 offset_bottom = 392.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2"]
-layout_mode = 2
 offset_right = 353.0
 offset_bottom = 392.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer"]
-layout_mode = 2
 offset_right = 353.0
-offset_bottom = 214.0
+offset_bottom = 179.0
 size_flags_vertical = 3
 
 [node name="Indic" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_right = 162.0
-offset_bottom = 214.0
+offset_bottom = 179.0
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/Indic"]
 custom_minimum_size = Vector2i(0, 34)
-layout_mode = 2
 offset_right = 162.0
 offset_bottom = 34.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/Indic/PanelContainer"]
-layout_mode = 2
 offset_right = 162.0
 offset_bottom = 26.0
 grow_horizontal = 2
@@ -103,19 +92,18 @@ text = "Индикация"
 horizontal_alignment = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/Indic"]
-layout_mode = 2
 offset_top = 34.0
 offset_right = 162.0
-offset_bottom = 214.0
+offset_bottom = 179.0
 size_flags_vertical = 3
 
 [node name="Cadjust" type="Control" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/Indic/PanelContainer2"]
-layout_mode = 2
+layout_mode = 3
 anchors_preset = 0
 offset_left = 81.0
-offset_top = 90.0
+offset_top = 72.0
 offset_right = 81.0
-offset_bottom = 90.0
+offset_bottom = 72.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
@@ -125,22 +113,19 @@ scale = Vector2(0.35, 0.35)
 ValveName = "AAA"
 
 [node name="alarms" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_left = 166.0
 offset_right = 353.0
-offset_bottom = 214.0
+offset_bottom = 179.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="Panel" type="Panel" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms"]
 custom_minimum_size = Vector2i(0, 34)
-layout_mode = 2
 offset_right = 187.0
 offset_bottom = 34.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms/Panel"]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -157,7 +142,6 @@ horizontal_alignment = 1
 
 [node name="LE_OC" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms"]
 modulate = Color(1, 0, 0, 1)
-layout_mode = 2
 offset_top = 34.0
 offset_right = 187.0
 offset_bottom = 60.0
@@ -165,7 +149,6 @@ text = "Ошибка команды О./З."
 
 [node name="LE_PRESSURE" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms"]
 modulate = Color(1, 0, 0, 1)
-layout_mode = 2
 offset_top = 60.0
 offset_right = 187.0
 offset_bottom = 86.0
@@ -173,7 +156,6 @@ text = "Ошибка давления"
 
 [node name="LE_LIQUID" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms"]
 modulate = Color(1, 0, 0, 1)
-layout_mode = 2
 offset_top = 86.0
 offset_right = 187.0
 offset_bottom = 112.0
@@ -181,7 +163,6 @@ text = "Ошибка расхода ГЖ"
 
 [node name="LE_FAILURE" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/alarms"]
 modulate = Color(1, 0, 0, 1)
-layout_mode = 2
 offset_top = 112.0
 offset_right = 187.0
 offset_bottom = 138.0
@@ -189,8 +170,7 @@ text = "Аварийное закрытие"
 autowrap_mode = 1
 
 [node name="rule" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer"]
-layout_mode = 2
-offset_top = 218.0
+offset_top = 183.0
 offset_right = 353.0
 offset_bottom = 392.0
 size_flags_horizontal = 3
@@ -198,13 +178,11 @@ size_flags_horizontal = 3
 [node name="ColorRect" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
 clip_contents = true
 custom_minimum_size = Vector2i(0, 34)
-layout_mode = 2
 offset_right = 353.0
 offset_bottom = 34.0
 color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/ColorRect"]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -220,7 +198,6 @@ text = "Управление"
 horizontal_alignment = 1
 
 [node name="BOpen" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
-layout_mode = 2
 offset_top = 38.0
 offset_right = 353.0
 offset_bottom = 69.0
@@ -228,7 +205,6 @@ size_flags_vertical = 3
 text = "Открыть"
 
 [node name="BClose" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
-layout_mode = 2
 offset_top = 73.0
 offset_right = 353.0
 offset_bottom = 104.0
@@ -236,30 +212,25 @@ size_flags_vertical = 3
 text = "Закрыть"
 
 [node name="BAlarms" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
-layout_mode = 2
 offset_top = 108.0
 offset_right = 353.0
 offset_bottom = 139.0
 text = "Сбросить ошибки"
 
 [node name="BLock" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
-visible = false
-layout_mode = 2
 offset_top = 143.0
-offset_right = 363.0
+offset_right = 353.0
 offset_bottom = 174.0
 size_flags_vertical = 3
 text = "Заблокировать"
 
 [node name="HBUnlock" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule"]
-layout_mode = 2
-offset_top = 143.0
+offset_top = 178.0
 offset_right = 353.0
-offset_bottom = 174.0
+offset_bottom = 209.0
 size_flags_vertical = 3
 
 [node name="LEPass" type="LineEdit" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/HBUnlock"]
-layout_mode = 2
 offset_right = 207.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
@@ -268,7 +239,6 @@ placeholder_text = "password"
 secret = true
 
 [node name="BUnlick" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/HBUnlock"]
-layout_mode = 2
 offset_left = 211.0
 offset_right = 353.0
 offset_bottom = 31.0
@@ -276,14 +246,12 @@ size_flags_vertical = 3
 text = "Разблокировать"
 
 [node name="setup_cont" type="PanelContainer" parent="Pfull_hider/VBhead_body/HBoxContainer"]
-layout_mode = 2
 offset_left = 357.0
 offset_right = 699.0
 offset_bottom = 392.0
 
 [node name="setups" type="VBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont"]
 custom_minimum_size = Vector2i(297, 0)
-layout_mode = 2
 offset_right = 342.0
 offset_bottom = 392.0
 theme_override_constants/separation = 0
@@ -291,13 +259,11 @@ theme_override_constants/separation = 0
 [node name="ColorRect" type="ColorRect" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
 clip_contents = true
 custom_minimum_size = Vector2i(0, 34)
-layout_mode = 2
 offset_right = 342.0
 offset_bottom = 34.0
 color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/ColorRect"]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -313,13 +279,11 @@ text = "Уставки"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 34.0
 offset_right = 342.0
 offset_bottom = 65.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 255.0
 offset_bottom = 28.0
@@ -327,19 +291,16 @@ size_flags_horizontal = 3
 text = "Давление клапан открыт (МПа)"
 
 [node name="SpinBox" type="SpinBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer"]
-layout_mode = 2
 offset_left = 259.0
 offset_right = 342.0
 offset_bottom = 31.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 65.0
 offset_right = 342.0
 offset_bottom = 96.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer2"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 255.0
 offset_bottom = 28.0
@@ -347,19 +308,16 @@ size_flags_horizontal = 3
 text = "Давление клапан закрыт (МПа)"
 
 [node name="SpinBox" type="SpinBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer2"]
-layout_mode = 2
 offset_left = 259.0
 offset_right = 342.0
 offset_bottom = 31.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 96.0
 offset_right = 342.0
 offset_bottom = 127.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer3"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 255.0
 offset_bottom = 28.0
@@ -367,19 +325,16 @@ size_flags_horizontal = 3
 text = "Низкое давление (МПа)"
 
 [node name="SpinBox" type="SpinBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer3"]
-layout_mode = 2
 offset_left = 259.0
 offset_right = 342.0
 offset_bottom = 31.0
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 127.0
 offset_right = 342.0
 offset_bottom = 158.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer4"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 255.0
 offset_bottom = 28.0
@@ -387,19 +342,16 @@ size_flags_horizontal = 3
 text = "Время открытия (С)"
 
 [node name="SpinBox" type="SpinBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer4"]
-layout_mode = 2
 offset_left = 259.0
 offset_right = 342.0
 offset_bottom = 31.0
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 158.0
 offset_right = 342.0
 offset_bottom = 189.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer5"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 255.0
 offset_bottom = 28.0
@@ -407,38 +359,32 @@ size_flags_horizontal = 3
 text = "Время открытия (С)"
 
 [node name="SpinBox" type="SpinBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer5"]
-layout_mode = 2
 offset_left = 259.0
 offset_right = 342.0
 offset_bottom = 31.0
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 189.0
 offset_right = 342.0
 offset_bottom = 215.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer6"]
-layout_mode = 2
 offset_right = 314.0
 offset_bottom = 26.0
 size_flags_horizontal = 3
 text = "Удаленный режим управления"
 
 [node name="CheckBox" type="CheckBox" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer6"]
-layout_mode = 2
 offset_left = 318.0
 offset_right = 342.0
 offset_bottom = 26.0
 
 [node name="HBoxContainer7" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 215.0
 offset_right = 342.0
 offset_bottom = 246.0
 
 [node name="Label" type="Label" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer7"]
-layout_mode = 2
 offset_top = 2.0
 offset_right = 114.0
 offset_bottom = 28.0
@@ -447,7 +393,6 @@ text = "Пароль"
 
 [node name="LineEdit" type="LineEdit" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer7"]
 custom_minimum_size = Vector2i(224, 0)
-layout_mode = 2
 offset_left = 118.0
 offset_right = 342.0
 offset_bottom = 31.0
@@ -455,20 +400,17 @@ text = "<предыдущий пароль>"
 placeholder_text = "пароль"
 
 [node name="HBoxContainer8" type="HBoxContainer" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups"]
-layout_mode = 2
 offset_top = 246.0
 offset_right = 342.0
 offset_bottom = 277.0
 
 [node name="Button" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer8"]
-layout_mode = 2
 offset_right = 169.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Считать"
 
 [node name="Button2" type="Button" parent="Pfull_hider/VBhead_body/HBoxContainer/setup_cont/setups/HBoxContainer8"]
-layout_mode = 2
 offset_left = 173.0
 offset_right = 342.0
 offset_bottom = 31.0

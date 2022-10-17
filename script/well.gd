@@ -20,11 +20,8 @@ func _ready():
 	nw = NordWind.new()
 	if nw.srvConnect(A_IP, A_PORT):
 		var init_res = nw.sendInitialization("my_diagram#default.conf")
-		if not init_res:
-			print()
-		elif init_res[0] == 0:
+		if init_res and init_res[0] == 0:
 			print("initialization ok")
-#	print(nw.sendExec("touch /HELLOWORLD"))
 #	nw.srvDisconnect()
 	#serach for any singal subscribers
 	var nodes = get_tree().get_nodes_in_group("signals")

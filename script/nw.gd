@@ -1,3 +1,16 @@
+#1. Create new Nw client
+#2. signalsByDict() - Add array of signal in certain list (read or write) 
+#3. srvConnect() - connect to server
+#4. sendInitialization() - connect to correct execution
+#5. sendSyncVarList() - synchronize signal list and fil it
+#6. -change write signals valuses by your own
+#7. sendExchange() - send writing signals and receive read signals
+#8. -use readed signals
+#9. -repeat from 6. or GOTO 10.
+#10. srvDisconnect() - disconnect from server
+#11. -repeat from 2. or GOTO 12.
+#12. free() Nw client
+
 class_name NordWind
 extends Node
 
@@ -36,13 +49,7 @@ var packet_size = 0
 var op = -1
 var data: PackedByteArray = []
 
-var rdsigs_new = [] #signals to be added
-var rdsigs = []
-var rdsigs_old = [] #signal to be remvoed
-
-var wrsigs_new = []
-var wrsigs = []
-var wrsigs_old = []
+var sigs = [[],[]]
 
 var sigs_not_found = []
 
@@ -83,34 +90,9 @@ func isStatusConnected():
 	return (cli.get_status() == cli.STATUS_CONNECTED)
 
 func cleanSyncLists():
-		#clean up lists for resync after next conection
-		if not rdsigs_old.is_empty():
-			for rdo in rdsigs_old: #will not need to delete future just remove from list
-				if rdo in rdsigs:
-					rdsigs.erase(rdo)
-			rdsigs_old.clear()
-		#check not clean list prevously, save _new list
-		if not rdsigs.is_empty():
-			rdsigs_new = rdsigs.duplicate()
-			rdsigs.clear()
-		
-		if not rdsigs_new.is_empty():	
-			for s in rdsigs_new:
-				s.clear()
-		
-		if not wrsigs_old.is_empty():
-			for wro in wrsigs_old:
-				if wro in wrsigs:
-					wrsigs.erase(wro)
-			wrsigs_old.clear()
-			
-		if not wrsigs.is_empty():
-			wrsigs_new = wrsigs.duplicate()
-			wrsigs.clear()
-			
-		if not wrsigs_new.is_empty():	
-			for s in wrsigs_new:
-				s.clear()
+	for l in sigs:
+		if l.is_empty():
+			l.clear()
 
 func srvDisconnect():
 	if cli:
@@ -222,36 +204,33 @@ func sendInitialization(algo: String):
 	
 	return [res.decode_u8(0), res.decode_u32(1)]
 	
-func findRdSignal(sname):
-	for s in rdsigs:
+func findRdSignal(sname: String):
+	for s in sigs[nwSignal.DIR_READ]:
 		if s.name == sname:
 			return s
 	return null
 			
-func findWrSignal(sname):
-	for s in wrsigs:
+func findWrSignal(sname: String):
+	for s in sigs[nwSignal.DIR_WRITE]:
 		if s.name == sname:
 			return s
 	return null
 
 #variable list could be created once
 func addVar(sig: nwSignal):
-	if sig.direction == sig.DIR_READ:
-		if sig in rdsigs: #check already in list
+	#check already in list
+	if sig in sigs[sig.direction]:
+		return false
+	#check this name is already in list
+	for rs in sigs[sig.direction]:
+		if rs.name == sig.name:
 			return false
-		if sig in rdsigs_new:
-			return false #already await for sync
-		rdsigs_new.append(sig)
-		return true
+	#add
+	sigs[sig.direction].append(sig)
+	return true
 	
-	if sig.direction == sig.DIR_WRITE:
-		if sig in wrsigs:
-			return false
-		if sig in wrsigs_new:
-			return false
-		wrsigs_new.append(sig)
-		return true
 
+	"""
 func rmVar(sig: nwSignal):
 	#FIXME: check by names
 	#check isgnal is invalid
@@ -273,8 +252,10 @@ func rmVar(sig: nwSignal):
 			return false
 		wrsigs_old.append(sig)
 		return true
-		
-func _sendSyncAdd(new, main):
+"""
+
+#adds only read or write signal
+func _sendSyncAdd(main):
 	if not self.srvConnected():
 		return false
 		
@@ -286,17 +267,17 @@ func _sendSyncAdd(new, main):
 	
 	var op = DAT_ADDRDVARS
 	#already checket length
-	if new[0].direction == nwSignal.DIR_WRITE:
+	if main[0].direction == nwSignal.DIR_WRITE:
 		op = DAT_ADDWRVARS
 	
 	data.resize(HEADER_SIZE + OP_SIZE + SIG_COUNT)
 	offset += HEADER_SIZE
 	data.encode_u8(offset, op)
 	offset += OP_SIZE
-	data.encode_u32(offset, new.size())
+	data.encode_u32(offset, main.size())
 	offset += SIG_COUNT
 	var l = 0
-	for s in new:
+	for s in main:
 		data.resize(data.size() + NAME_LEN)
 		l = s.name.length()
 		data.encode_u32(offset, l)
@@ -311,9 +292,8 @@ func _sendSyncAdd(new, main):
 	
 	#now receive response and parce it 
 #	return #FIXME: TOBE REMOVED WHEN TESTED
-	
 	l = cli.get_u32()
-	for s in new:
+	for s in main:
 		s.type = cli.get_u8()
 		#FIXME: may be loop with changin array siszes
 		for i in range(3):
@@ -324,17 +304,7 @@ func _sendSyncAdd(new, main):
 		else:
 			s.VID = -1
 			print(s.name, " has no VID")
-		
-	#organize lists
-	while not new.is_empty():
-		#add only signal found
-		if new[0].type != nwSignal.INVALID_SIGNAL:
-			main.append(new[0])
-		else:
-			sigs_not_found.append(new[0])
-		#remove anyway
-		new.remove_at(0)
-	
+
 func _sendSyncRm(old, main):
 	#FIXME: function is useless cause of no VID mostly
 	var size = 0
@@ -374,22 +344,13 @@ func _sendSyncRm(old, main):
 		main.erase(s)
 	old.clear()
 	
-		
 #need to resync after reconnection!!!
 func sendSyncVarList():
 	sigs_not_found.clear()
-	#TODO: add read var list
-	if not rdsigs_new.is_empty():
-		_sendSyncAdd(rdsigs_new, rdsigs)
-	#TODO: add write var list
-	if not wrsigs_new.is_empty():
-		_sendSyncAdd(wrsigs_new, wrsigs)
-	#TOOD: rm read var list
-	if not rdsigs_old.is_empty():
-		_sendSyncRm(rdsigs_old, rdsigs)
-	#TODO: rm write var list
-	if not wrsigs_old.is_empty():
-		_sendSyncRm(wrsigs_old, wrsigs)
+	for l in sigs:
+		#TODO: add read var list
+		if not l.is_empty():
+			_sendSyncAdd(l)
 
 #change execution status 
 func sendCommand(cmd = CMD_PLAY):
@@ -422,10 +383,8 @@ func sendCommand(cmd = CMD_PLAY):
 func sendExchnge():
 	if not self.srvConnected():
 		return false
-	#check lists are approved
-	if rdsigs.is_empty():
-		return false
-	if wrsigs.is_empty():
+	#skip if signal lists are empty
+	if sigs[nwSignal.DIR_READ].is_empty() and sigs[nwSignal.DIR_WRITE].is_empty():
 		return false
 	
 	var data = PackedByteArray()
@@ -433,14 +392,14 @@ func sendExchnge():
 	
 	#calculate wirte signal sizes
 	var wrsize = 0
-	for s in wrsigs:
+	for s in sigs[nwSignal.DIR_WRITE]:
 		wrsize += s.vals.size()
 	
 	data.resize(HEADER_SIZE + OP_SIZE + wrsize)
 	offset += HEADER_SIZE
 	data.encode_u8(offset, DAT_EXCHANGE)
 	offset += OP_SIZE
-	for s in wrsigs:
+	for s in sigs[nwSignal.DIR_WRITE]:
 		#push as type format
 		match s.type:
 			nwSignal.FLOAT64:
@@ -467,7 +426,7 @@ func sendExchnge():
 	step = cli.get_double()
 	connection_time = cli.get_double()
 	flags = cli.get_u32()
-	for s in rdsigs:
+	for s in sigs[nwSignal.DIR_READ]:
 		match s.type:
 			nwSignal.FLOAT64:
 				for i in range(s.vals.size()):
@@ -482,35 +441,24 @@ func sendExchnge():
 			
 	emit_signal("signalsUpdated")
 	
-func _findByName(sn: String, arr):
-	for s in arr:
+func signalByName(sn: String, dir = nwSignal.DIR_READ):
+	for s in sigs[dir]:
 		if s.name == sn:
 			return s
 	return null
-	
+
+#                 dev:701SCM001  sd(array) 
 func signalsByDict(dev: String, sd, dir = nwSignal.DIR_READ):
 	for k in sd:
 		#get full signal string
-		#        701   GTV   001    _   open
+		#        701GTV001_open
 		var ss = dev + "_" + k
-		if dir == nwSignal.DIR_READ:
-			sd[k] = _findByName(ss, rdsigs)
-			if sd[k]:
-				continue
-			sd[k] = _findByName(ss, rdsigs_new)
-			if sd[k]:
-				continue
-		else:
-			sd[k] = _findByName(ss, wrsigs)
-			if sd[k]:
-				continue
-			sd[k] = _findByName(ss, wrsigs_new)
-			if sd[k]:
-				continue
-		#no signal found
-		var s = nwSignal.new(ss, dir)
-		addVar(s)
-		sd[k] = s
+		sd[k] = signalByName(ss, dir)
+		if sd[k] == null:
+			#no signal found
+			var s = nwSignal.new(ss, dir)
+			addVar(s)
+			sd[k] = s
 	
 func sendSaveState(state_name):
 	var res: PackedByteArray = _sendStdStrCmd(state_name, DAT_SAVESTATE)

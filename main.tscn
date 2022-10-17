@@ -20,6 +20,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="main_container" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_vertical = 3
@@ -27,12 +28,14 @@ mouse_filter = 2
 script = ExtResource("1_ypcs0")
 
 [node name="background" type="ColorRect" parent="main_container"]
+layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.1591, 0.37, 0.37, 1)
 
 [node name="user" type="Label" parent="main_container"]
+layout_mode = 2
 offset_right = 168.0
 offset_bottom = 26.0
 size_flags_horizontal = 0
@@ -40,6 +43,7 @@ size_flags_vertical = 0
 text = "Пользователь - Роль"
 
 [node name="Caption" type="Label" parent="main_container"]
+layout_mode = 2
 offset_left = 464.0
 offset_right = 688.0
 offset_bottom = 26.0
@@ -85,8 +89,20 @@ position = Vector2(5, -190)
 type = "AMV"
 mode = "Р"
 
+[node name="GTVimg2" parent="main_container/scada/701" instance=ExtResource("6_0hcol")]
+position = Vector2(289, 445)
+rotation = 1.5708
+ValveName = "HELL"
+index = "002"
+
+[node name="Label" parent="main_container/scada/701/GTVimg2" instance=ExtResource("7_bt4e0")]
+position = Vector2(-210, -170)
+rotation = -1.5708
+type = "HELL"
+
 [node name="SCtaskBar" type="ScrollContainer" parent="main_container"]
 custom_minimum_size = Vector2i(894, 102)
+layout_mode = 2
 offset_left = 129.0
 offset_top = 546.0
 offset_right = 1023.0
@@ -96,19 +112,41 @@ size_flags_vertical = 8
 vertical_scroll_mode = 0
 
 [node name="HBTaskList" type="HBoxContainer" parent="main_container/SCtaskBar"]
+layout_mode = 2
 offset_right = 894.0
 offset_bottom = 102.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBTask" parent="main_container/SCtaskBar/HBTaskList" instance=ExtResource("10_y6wml")]
+layout_mode = 2
+offset_right = 220.0
+offset_bottom = 102.0
+
+[node name="VBTask2" parent="main_container/SCtaskBar/HBTaskList" instance=ExtResource("10_y6wml")]
+layout_mode = 2
+offset_left = 224.0
+offset_right = 445.0
+offset_bottom = 102.0
+
+[node name="VBTask3" parent="main_container/SCtaskBar/HBTaskList" instance=ExtResource("10_y6wml")]
+layout_mode = 2
+offset_left = 449.0
+offset_right = 669.0
+offset_bottom = 102.0
+
+[node name="VBTask4" parent="main_container/SCtaskBar/HBTaskList" instance=ExtResource("10_y6wml")]
+layout_mode = 2
+offset_left = 673.0
 offset_right = 894.0
 offset_bottom = 102.0
 
 [node name="left_menu" parent="main_container" instance=ExtResource("10_m6bhq")]
+layout_mode = 2
 
 [node name="GTV_menu" parent="main_container" instance=ExtResource("7_ces71")]
 visible = false
+layout_mode = 2
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
