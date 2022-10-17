@@ -23,7 +23,12 @@ var io_mode = IO_UNKNOWN
 var classified = CLSS_UNKNOWN
 
 func resize():
-	vals.resize(dims[0] * dims[1] * dims[2] )
+	var tot_dim = dims[0]
+	if dims[1] > 0:
+		tot_dim *= dims[1]
+	if dims[2] > 0:
+		tot_dim *= dims[2]
+	vals.resize(tot_dim)
 	'''
 	vals.resize(dims[0])
 	if dims[1] > 0:

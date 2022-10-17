@@ -5,8 +5,9 @@ extends Node2D
 @export_range(0, 65535) var A_PORT = 22375
 @export var B_IP: String = "192.168.100.41"
 @export_range(0, 65535) var B_PORT = 22375
-@export var Exchange_Timeout_Us = 1000
-@onready var nw: NordWind = null
+@export var Exchange_Timeout_s = 2
+@export var Algorythm = "my_diagram"
+@export var Config = "default.conf"
 
 var pre_sigs = [] #prevously ready signals
 
@@ -16,18 +17,19 @@ var tcnt = 0
 func _ready():
 	set_meta("type", "root")
 	set_meta("id", ID)
-	#create NordWind client
-	nw = NordWind.new()
-	if nw.srvConnect(A_IP, A_PORT):
-		var init_res = nw.sendInitialization("my_diagram#default.conf")
+	
+	#use global client
+	if Nw.srvConnect(A_IP, A_PORT):
+		var init_res = Nw.sendInitialization(Algorythm + "#" + Config)
 		if init_res and init_res[0] == 0:
 			print("initialization ok")
+		Nw.sendSyncVarList()
 #	nw.srvDisconnect()
 	#serach for any singal subscribers
-	var nodes = get_tree().get_nodes_in_group("signals")
-	for n in nodes:
-		for s in n.loop_rd:
-			n.loop_rd[s] = subscribeRdSignal(n.device, s)
+	#var nodes = get_tree().get_nodes_in_group("signals")
+	#for n in nodes:
+	#	for s in n.loop_rd:
+	#		n.loop_rd[s] = subscribeRdSignal(n.device, s)
 			
 	#set self global id for devices
 	var nl = get_tree().get_nodes_in_group("device")
@@ -36,8 +38,8 @@ func _ready():
 			n.setGlobalId(str(name))
 	
 	#register signal in nordwind
-	for s in pre_sigs:
-		nw.addVar(s)
+	#for s in pre_sigs:
+#		nw.addVar(s)
 		
 	
 
@@ -46,30 +48,30 @@ func subscribeRdSignal(id, sig):
 	var fsn = id + "_" + sig
 	
 	#check signal is in NwList
-	if nw:
-		var sn = nw.findRdSignal(fsn)
-		if sn: 
-			return sn
+	#if nw:
+	#	var sn = nw.findRdSignal(fsn)
+	#	if sn: 
+	#		return sn
 		
 	#check signal already is in request list
-	for s in pre_sigs:
-		if s.name == fsn:
-			return s
+	#for s in pre_sigs:
+	#	if s.name == fsn:
+	#		return s
 			
 	#no signal found add new
-	var sn = nwSignal.new(fsn)
-	if nw:
-		nw.addVar(sn)
-	else:
-		pre_sigs.append(sn)
-	return sn
+	#var sn = nwSignal.new(fsn)
+	#if nw:
+	#	nw.addVar(sn)
+	#else:
+	#	pre_sigs.append(sn)
+	#return sn
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	tcnt += delta
-	if tcnt >= Exchange_Timeout_Us:
-		nw.sendExchnge()
+	if tcnt >= Exchange_Timeout_s:
+		Nw.sendExchnge()
 		var ns = get_tree().call_group("loop_rd", "sigUpdated")
 		ns
 	pass

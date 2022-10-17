@@ -15,6 +15,8 @@ var mode = MD_ENGINEER
 @onready var b_lock = $Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/BLock
 @onready var b_ulock = $Pfull_hider/VBhead_body/HBoxContainer/PanelContainer2/VBoxContainer/rule/HBUnlock
 
+var GID = "700"
+var index = "000"
 var nw: NordWind = null
 var global_rd = {
 	"interlock": null,
@@ -71,6 +73,11 @@ func _show_gtv_menu(gid, index, vlvName):
 	if self.visible:
 		return
 		
+	self.GID = gid
+	self.index = index
+	#get Global nordwind signals
+	Nw.signalsByDict(GID+"GTV"+index, global_rd)
+		
 	#show or hide ui parts by role
 	if User.role == User.ROLE_OPERATOR:
 		engineer_panel.visible = false
@@ -81,8 +88,7 @@ func _show_gtv_menu(gid, index, vlvName):
 		b_close.visible = false
 		b_alarm.visible = false 
 		
-	
-	Nw.signalsByDict(gid + "GTV" + index, global_rd)
+
 	
 	caption_label.text = vlvName
 	gtv_img.ValveName = vlvName
@@ -94,11 +100,13 @@ func signalsUpdated():
 	if not self.visible:
 		return
 		
+	#skip if signals is not loaded
+	if global_rd["oc_alarm"] == null:
+		return
+		
 	#read alarm signals from global Nw
-	if global_rd["oc_alarm"].getBool():
-		le_oc.visible = true
-	if global_rd["pm_alamr"].getBool():
-		le_pressure.visible = true
+	le_oc.visible = global_rd["oc_alarm"].getBool()
+	le_pressure.visible = global_rd["pm_alarm"].getBool()
 	if global_rd["interlock"].getBool():
 		b_ulock.visible = true
 		b_lock.visible = false
@@ -136,4 +144,11 @@ func _on_b_alarms_button_up():
 	le_pressure.visible = false
 	le_hidraulic.visible = false
 	le_failure.visible = false
+	pass # Replace with function body.
+
+
+func _on_b_open_button_up():
+	nw.signalsByDict(GID+"GTV"+index, ctl_rd_signals, nwSignal.DIR_READ)
+	nw.signalsByDict(GID+"GTV"+index, ctl_wr_signals, nwSignal.DIR_WRITE)
+#	nw.connect()
 	pass # Replace with function body.

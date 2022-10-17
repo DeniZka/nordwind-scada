@@ -34,7 +34,7 @@ enum {MD_MANUAL, MD_REMOTE}
 
 signal show_gtv_menu 
 
-var GID = \"700\"
+var GID = \"701\" #FIXME: GET CORRECT GID
 const clr_open = Color.DARK_GREEN
 const clr_close = Color.ORANGE_RED
 const clr_unknown = Color.GRAY
@@ -47,8 +47,13 @@ var signals = {
 	\"closed\": null,    #акрыт
 	\"oc_alarm\": null,  #не открылся
 	\"pm_alarm\": null,  #не перерасход жидкости
-	\"remote\": null
+	\"remote\": null,
+	#preload other needed signal for opening menu pre ready signals
+	\"interlock\": null
+	#TODO: complete list
 }
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -57,7 +62,7 @@ func _ready():
 		Nw.connect(\"signalsUpdated\", Callable(self, \"signalsUpdated\"))
 		Nw.signalsByDict(self.GID + \"GTV\" + index, signals, nwSignal.DIR_READ)
 	
-	
+	\"\"\"
 	if nw.srvConnect(\"192.168.100.40\", 32375):
 #		print(nw.sendInitialization(\"my_diagram#default.conf\"))
 #		var s: nwSignal = nwSignal.new(\"701GTV001_open\".to_lower(), nwSignal.DIR_WRITE)
@@ -66,10 +71,10 @@ func _ready():
 		
 		nw.sendGetAvailableVarList()
 		nw.srvDisconnect()
-	
+	\"\"\"
 	
 	if $Label:
-		$Label.type = self.vlvName
+		$Label.type = \"AMV\"
 	setMode(MD_MANUAL)
 	#signal
 	add_to_group(\"GTV\")
@@ -82,7 +87,7 @@ func setGlobalId(gid):
 	pass
 	
 func signalsUpdated():
-	setMode(signals[\"remote\"].getBool())
+	setMode(int(signals[\"remote\"].getBool()))
 		
 	#check any of action is finished
 	if signals[\"open\"].getBool():
@@ -110,9 +115,9 @@ func signalsUpdated():
 
 func setMode(mode):
 	if has_node(\"Label\"):
-		if mode == MD_MANUAL:
+		if int(mode) == MD_MANUAL:
 			$Label.mode = \"Р\"
-		if mode == MD_REMOTE:
+		if int(mode) == MD_REMOTE:
 			$Label.mode = \"У\"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

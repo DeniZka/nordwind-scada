@@ -282,7 +282,8 @@ func _sendSyncAdd(main):
 		l = s.name.length()
 		data.encode_u32(offset, l)
 		offset += NAME_LEN
-		data += s.name.to_ascii_buffer()
+		print(s.name.to_lower())
+		data += s.name.to_lower().to_ascii_buffer()
 		offset += l
 	
 	#FINALLY SET HEADER LEN
@@ -299,11 +300,11 @@ func _sendSyncAdd(main):
 		for i in range(3):
 			s.dims[i] = cli.get_u32()
 		s.resize()
-		if l > 13: #
-			s.VID = cli.get_u32()
-		else:
-			s.VID = -1
-			print(s.name, " has no VID")
+		#if l > 13: #
+		#	s.VID = cli.get_u32()
+		#else:
+		#	s.VID = -1
+		#	print(s.name, " has no VID")
 
 func _sendSyncRm(old, main):
 	#FIXME: function is useless cause of no VID mostly
@@ -420,7 +421,7 @@ func sendExchnge():
 	cli.put_data(data)
 	data.clear()
 	
-	return #FIXME: remove
+#	return #FIXME: remove
 	
 	cli.get_u32()
 	step = cli.get_double()
