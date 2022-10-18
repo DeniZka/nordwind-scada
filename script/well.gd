@@ -72,6 +72,5 @@ func _process(delta):
 	tcnt += delta
 	if tcnt >= Exchange_Timeout_s:
 		Nw.sendExchnge()
-		var ns = get_tree().call_group("loop_rd", "sigUpdated")
-		ns
+		tcnt = 0
 	pass

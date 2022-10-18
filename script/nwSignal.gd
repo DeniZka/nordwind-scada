@@ -91,3 +91,9 @@ func setBool(val):
 	else:
 		return false
 	
+func valsSize():
+	match self.type:
+		FLOAT64: return vals.size() * 8
+		CHAR8: return vals.size() 
+		INT32: return vals.size() * 4
+		INVALID_SIGNAL: return 0

@@ -97,7 +97,7 @@ func isStatusConnected():
 
 func cleanSyncLists():
 	for l in sigs:
-		if l.is_empty():
+		if not l.is_empty():
 			l.clear()
 
 func srvDisconnect():
@@ -224,16 +224,16 @@ func findWrSignal(sname: String):
 	return null
 
 #variable list could be created once
-func addVar(sig: nwSignal):
+func addVar(sig: nwSignal, dir=nwSignal.DIR_READ):
 	#check already in list
-	if sig in sigs[sig.direction]:
+	if sig in sigs[dir]:
 		return false
 	#check this name is already in list
-	for rs in sigs[sig.direction]:
+	for rs in sigs[dir]:
 		if rs.name == sig.name:
 			return false
 	#add
-	sigs[sig.direction].append(sig)
+	sigs[dir].append(sig)
 	return true
 	
 
@@ -262,7 +262,7 @@ func rmVar(sig: nwSignal):
 """
 
 #adds only read or write signal
-func _sendSyncAdd(main):
+func _sendSyncAdd(main, dir=nwSignal.DIR_READ):
 	if not self.srvConnected():
 		return false
 		
@@ -274,7 +274,7 @@ func _sendSyncAdd(main):
 	
 	var op = DAT_ADDRDVARS
 	#already checket length
-	if main[0].direction == nwSignal.DIR_WRITE:
+	if dir == nwSignal.DIR_WRITE:
 		op = DAT_ADDWRVARS
 	
 	data.resize(HEADER_SIZE + OP_SIZE + SIG_COUNT)
@@ -355,10 +355,10 @@ func _sendSyncRm(old, main):
 #need to resync after reconnection!!!
 func sendSyncVarList():
 	sigs_not_found.clear()
-	for l in sigs:
+	for i in range(sigs.size()):
 		#TODO: add read var list
-		if not l.is_empty():
-			_sendSyncAdd(l)
+		if not sigs[i].is_empty():
+			_sendSyncAdd(sigs[i], i)
 
 #change execution status 
 func sendCommand(cmd = CMD_PLAY):
@@ -401,7 +401,7 @@ func sendExchnge():
 	#calculate wirte signal sizes
 	var wrsize = 0
 	for s in sigs[nwSignal.DIR_WRITE]:
-		wrsize += s.vals.size()
+		wrsize += s.valsSize()
 	
 	data.resize(HEADER_SIZE + OP_SIZE + wrsize)
 	offset += HEADER_SIZE
@@ -430,7 +430,7 @@ func sendExchnge():
 	
 #	return #FIXME: remove
 	
-	cli.get_u32()
+	var rcv_len = cli.get_u32()
 	step = cli.get_double()
 	connection_time = cli.get_double()
 	flags = cli.get_u32()
@@ -461,12 +461,17 @@ func signalsByDict(dev: String, sd, dir = nwSignal.DIR_READ):
 		#get full signal string
 		#        701GTV001_open
 		var ss = dev + "_" + k
-		sd[k] = signalByName(ss, dir)
-		if sd[k] == null:
-			#no signal found
-			var s = nwSignal.new(ss, dir)
-			addVar(s)
-			sd[k] = s
+		#search if signal exists
+		if sd[k] != null:
+			if not sd[k] in sigs[dir]: #attach pre ready
+				addVar(sd[k], dir)
+		else: #no signal in dict
+			sd[k] = signalByName(ss, dir)
+			if sd[k] == null:
+				#no signal found
+				var s = nwSignal.new(ss, dir)
+				addVar(s, dir)
+				sd[k] = s
 	
 func sendSaveState(state_name):
 	var res: PackedByteArray = _sendStdStrCmd(state_name, DAT_SAVESTATE)

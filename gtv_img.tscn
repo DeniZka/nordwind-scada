@@ -6,8 +6,6 @@
 script/source = "@tool
 extends Node2D
 
-@onready var nw: NordWind = NordWind.new()
-
 var vlvName = \"\"
 @export var ValveName = \"GTV\":
 	get:

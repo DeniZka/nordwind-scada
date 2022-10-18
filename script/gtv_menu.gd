@@ -25,31 +25,30 @@ var mode = MD_ENGINEER
 var GID = "700"
 var index = "000"
 #multipurpose nordwind
-var nw: NordWind = null
+
+#every time read signals
 var global_rd = {
 	"interlock": null,
 	"pm_alarm": null,
 	"oc_alarm": null
 }
 
-var ctl_rd_signals = {
+#operator control signals
+var ctl_signals = {
 	"open" : null,
 	"closed": null
 }
-var ctl_wr_signals = {
-	"open": null,
-	"closed": null
-}
 
+#engineer setup signals
 var setup_signals = {
+	"password": null,
 	"remote": null,
 	"timer_open": null,
 	"timer_close": null,
 	"open_sp": null,
 	"closed_sp1": null,
 	"rl_check": null,
-	"fl_check": null,
-	"password": null
+	"fl_check": null
 }
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -57,7 +56,6 @@ func _ready():
 		#connect to global Nw
 		Nw.connect("signalsUpdated", Callable(self, "signalsUpdated"))
 		
-	nw = NordWind.new()
 	
 	var nl = get_tree().get_nodes_in_group("GTV")
 	for n in nl:
@@ -72,16 +70,16 @@ func _on_hint_mouse_exited():
 #	visible = false
 	pass # Replace with function body.
 
-
-func _on_win_close_button_up():
-	visible = false
-	$"../Valve".scale = Vector2(1, 1)
-	pass # Replace with function body.
-
 #show this menu with new selected GTV configuration
 func _show_gtv_menu(gid, index, vlvName):
 	if self.visible:
 		return
+		
+	#clear if prevous show signal exists
+	if gid != self.GID or index != self.index:
+		#_clearSignalDict(global_rd) #DO NOT TOUCH GLOBAL SIGNALS
+		_clearSignalDict(ctl_signals)
+		_clearSignalDict(setup_signals)
 		
 	self.GID = gid
 	self.index = index
@@ -101,8 +99,11 @@ func _show_gtv_menu(gid, index, vlvName):
 
 	
 	caption_label.text = vlvName
-	gtv_img.ValveName = vlvName
+	#gtv_img.ValveName = vlvName
 #	gtv_img.Index = index
+	#preread setup signals
+	if User.role != User.ROLE_OPERATOR:
+		_on_b_setuprd_button_up()
 	self.visible = true
 
 func signalsUpdated():
@@ -130,22 +131,19 @@ func signalsUpdated():
 		b_open.visible = true
 		b_close.visible = true
 		b_alarm.visible = true 
-	
-
-func _on_gtv_menu_mouse_entered():
-	print("Mouse Entered")
-	pass # Replace with function body.
 
 
-func _on_gtv_menu_mouse_exited():
-	print("Mouse Exited")
-	pass # Replace with function body.
-
+func _clearSignalDict(sdict):
+	for k in sdict:
+		if sdict[k]:
+			sdict[k].clear()
+			sdict[k] = null
 
 func _on_pfull_hider_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == 1:
 			visible = false
+
 	pass # Replace with function body.
 
 
@@ -158,32 +156,32 @@ func _on_b_alarms_button_up():
 
 
 func _on_b_open_button_up():
-	nw.signalsByDict(GID+"GTV"+index, ctl_rd_signals, nwSignal.DIR_READ)
-	nw.signalsByDict(GID+"GTV"+index, ctl_wr_signals, nwSignal.DIR_WRITE)
 #	nw.connect()
 	pass # Replace with function body.
 
 
 func _on_b_setupwr_button_up():
 	Log.usr("Задание уставок для %s" % GID + "GTV" + index)
+	var nw: NordWind = NordWind.new()
 	nw.signalsByDict(GID + "GTV" + index, setup_signals,  nwSignal.DIR_WRITE)
 	if nw.srvConnect(Nw.ip, Nw.port):
 #		Log.log("Подключение к серверу")
 		nw.sendInitialization(Nw.init_algo)
 		nw.sendSyncVarList()
 		setup_signals["timer_open"].setFloat(s_topen.value)
-		setup_signals["timer_open"].setFloat(s_tclose.value)
+		setup_signals["timer_close"].setFloat(s_tclose.value)
 		setup_signals["open_sp"].setFloat(s_opensp.value)
 		setup_signals["closed_sp1"].setFloat(s_closedsp1.value)
 		setup_signals["remote"].setBool(s_remote.button_pressed)
 		nw.sendExchnge()
 		nw.srvDisconnect()
-	
+	nw.free()
 	#TODO: write setups
 	pass # Replace with function body.
 
 func _on_b_setuprd_button_up():
 	Log.usr("Чтение уставок для %s" % GID + "GTV" + index)
+	var nw: NordWind = NordWind.new()
 	nw.signalsByDict(GID + "GTV" + index, setup_signals,  nwSignal.DIR_READ)
 	if nw.srvConnect(Nw.ip, Nw.port):
 #		Log.log("Подключение к серверу")
@@ -195,10 +193,11 @@ func _on_b_setuprd_button_up():
 		nw.srvDisconnect()
 		
 		s_topen.value = setup_signals["timer_open"].getFloat()
-		s_tclose.value = setup_signals["timer_open"].getFloat()
+		s_tclose.value = setup_signals["timer_close"].getFloat()
 		s_opensp.value = setup_signals["open_sp"].getFloat()
 		s_closedsp1.value = setup_signals["closed_sp1"].getFloat()
 		s_remote.button_pressed = setup_signals["remote"].getBool()
 		#read vals
+	nw.free()
 	#TODO: read setups
 	pass # Replace with function body.
