@@ -13,8 +13,7 @@ func _process(delta):
 	pass
 	
 func _input(event):
-#	print(event)
 	if event is InputEventKey:
-#		print(event.keycode)
+		print(event.keycode)
 		if event.keycode == KEY_ESCAPE:
 			get_tree().change_scene_to_file("res://node_2d.tscn")

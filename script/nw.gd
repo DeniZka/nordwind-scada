@@ -446,7 +446,7 @@ func sendExchnge():
 				for i in range(s.vals.size()):
 					s.vals[i] = cli.get_32()
 			#TODO: complete other signal types
-			
+
 	emit_signal("signalsUpdated")
 	
 func signalByName(sn: String, dir = nwSignal.DIR_READ):

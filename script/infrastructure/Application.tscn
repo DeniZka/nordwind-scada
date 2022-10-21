@@ -1,0 +1,736 @@
+[gd_scene load_steps=17 format=3 uid="uid://dq06cr7cur7f5"]
+
+[ext_resource type="Script" path="res://script/infrastructure/Application.gd" id="1_2f538"]
+[ext_resource type="Script" path="res://script/infrastructure/StateMachine.gd" id="1_kn84l"]
+[ext_resource type="Script" path="res://script/infrastructure/BootstrapState.gd" id="2_egexr"]
+[ext_resource type="Script" path="res://script/infrastructure/AuthenticationState.gd" id="3_awv10"]
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Workplace.gd" id="4_78ma7"]
+[ext_resource type="PackedScene" uid="uid://cqrvpdvdyd2bm" path="res://script/infrastructure/UI/LoginForm.tscn" id="6_7vwc3"]
+[ext_resource type="PackedScene" uid="uid://c8fxeivti716x" path="res://script/infrastructure/UI/WelcomeCurtain.tscn" id="6_eo2tt"]
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/ControlModule.gd" id="8_w7b8q"]
+[ext_resource type="Resource" uid="uid://csjbt0bqjcui2" path="res://script/infrastructure/Workplace/module701.tres" id="9_ltj8k"]
+[ext_resource type="Script" path="res://script/infrastructure/ConnectionStatusPanel.gd" id="10_1qj0o"]
+[ext_resource type="PackedScene" uid="uid://bona8hf5t252s" path="res://gtv_img.tscn" id="11_hlumh"]
+[ext_resource type="PackedScene" uid="uid://3hae3bfde7rk" path="res://script/infrastructure/Workplace/Devices/GTVDevice.tscn" id="11_oe0nf"]
+[ext_resource type="PackedScene" uid="uid://cmeka71kc33gk" path="res://dev_label.tscn" id="12_t0l4f"]
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Devices/GTVWindow.gd" id="14_dxmsu"]
+[ext_resource type="Script" path="res://script/infrastructure/GTVOperatorPanel.gd" id="14_y0qcc"]
+[ext_resource type="Script" path="res://script/infrastructure/GTVEngineerPanel.gd" id="17_j8ho2"]
+
+[node name="Application" type="Node"]
+script = ExtResource("1_2f538")
+state_machine_node = NodePath("StateMachine")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("1_kn84l")
+
+[node name="Bootstrap" type="Node" parent="StateMachine"]
+script = ExtResource("2_egexr")
+
+[node name="Authentication" type="Node" parent="StateMachine" node_paths=PackedStringArray("ui")]
+script = ExtResource("3_awv10")
+ui = NodePath("Authentication UI")
+
+[node name="Authentication UI" type="Node2D" parent="StateMachine/Authentication"]
+visible = false
+
+[node name="Welcome Curtain" parent="StateMachine/Authentication/Authentication UI" instance=ExtResource("6_eo2tt")]
+
+[node name="LoginForm" parent="StateMachine/Authentication/Authentication UI" instance=ExtResource("6_7vwc3")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 829.0
+offset_top = 67.0
+offset_right = 829.0
+offset_bottom = 67.0
+
+[node name="Workplace" type="Node" parent="StateMachine" node_paths=PackedStringArray("workplace", "user")]
+script = ExtResource("4_78ma7")
+workplace = NodePath("")
+user = NodePath("")
+
+[node name="Control" type="Control" parent="StateMachine/Workplace"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background Rect" type="ColorRect" parent="StateMachine/Workplace/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.196078, 0.360784, 0.376471, 1)
+
+[node name="Username" type="Label" parent="StateMachine/Workplace/Control"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 209.0
+offset_bottom = 64.0
+text = "Username - Role"
+
+[node name="Subsea Control Module 701" type="Node2D" parent="StateMachine/Workplace/Control"]
+script = ExtResource("8_w7b8q")
+data = ExtResource("9_ltj8k")
+gtv_window_node = NodePath("../GTVWindow")
+connection_panel_node = NodePath("Control")
+
+[node name="Module Name" type="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 486.5
+offset_top = 10.0
+offset_right = 665.5
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "MODULE NAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="StateMachine/Workplace/Control/Subsea Control Module 701" node_paths=PackedStringArray("main_connection", "reserve_connection")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("10_1qj0o")
+main_connection = NodePath("Connection Status Label/NordWind Main Label")
+reserve_connection = NodePath("Connection Status Label/NordWind Reserve Label")
+
+[node name="Connection Status Label" type="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 936.0
+offset_top = -10.0
+offset_right = 1115.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Connection Status:
+"
+vertical_alignment = 1
+
+[node name="NordWind Main Label" type="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/Control/Connection Status Label"]
+modulate = Color(0, 1, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.5
+offset_top = 20.5
+offset_right = 89.5
+offset_bottom = 55.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NordWind Main
+"
+vertical_alignment = 1
+
+[node name="NordWind Reserve Label" type="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/Control/Connection Status Label"]
+modulate = Color(0, 1, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.5
+offset_top = 55.5
+offset_right = 89.5
+offset_bottom = 90.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NordWind Reserve
+"
+vertical_alignment = 1
+
+[node name="GTVDevice" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
+position = Vector2(563, 358)
+
+[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice" instance=ExtResource("12_t0l4f")]
+position = Vector2(-0.000244141, -195)
+mode = "Р"
+
+[node name="GTVDevice2" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
+position = Vector2(435, 358)
+
+[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice2" instance=ExtResource("12_t0l4f")]
+position = Vector2(-0.000244141, -195)
+mode = "Р"
+
+[node name="GTVWindow" type="Control" parent="StateMachine/Workplace/Control" node_paths=PackedStringArray("caption_label", "connection_id_label")]
+visible = false
+custom_minimum_size = Vector2i(600, 400)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
+script = ExtResource("14_dxmsu")
+caption_label = NodePath("Background Window/Window Body/Caption Container/Caption Label")
+gtv_engineer_panel_node = NodePath("Background Window/Window Body/Content Container/Engineer Panel")
+gtv_operator_panel_node = NodePath("Background Window/Window Body/Content Container/Operator Panel")
+connection_id_label = NodePath("Background Window/Window Body/Connection Container/HBoxContainer/Status Connection/Connection Caption Label")
+
+[node name="Background Window" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow"]
+custom_minimum_size = Vector2i(600, 400)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Window Body" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window"]
+modulate = Color(0.972549, 0.972549, 0.972549, 1)
+custom_minimum_size = Vector2i(699, 428)
+layout_mode = 2
+offset_left = 222.0
+offset_top = 110.0
+offset_right = 930.0
+offset_bottom = 538.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Caption Container" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body"]
+layout_mode = 2
+offset_right = 708.0
+offset_bottom = 32.0
+
+[node name="Caption Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Caption Container"]
+custom_minimum_size = Vector2i(0, 32)
+layout_mode = 2
+offset_right = 708.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "GTV(ID)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Connection Container" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body"]
+layout_mode = 2
+offset_top = 36.0
+offset_right = 708.0
+offset_bottom = 68.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container"]
+layout_mode = 2
+offset_right = 708.0
+offset_bottom = 32.0
+
+[node name="Status Connection" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer"]
+custom_minimum_size = Vector2i(350, 32)
+layout_mode = 2
+offset_right = 350.0
+offset_bottom = 32.0
+
+[node name="Connection Caption Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer/Status Connection"]
+custom_minimum_size = Vector2i(0, 32)
+layout_mode = 2
+offset_right = 350.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Соединение по основной линии"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer"]
+layout_mode = 2
+offset_left = 354.0
+offset_right = 708.0
+offset_bottom = 32.0
+
+[node name="Main Connection Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2i(175, 0)
+layout_mode = 2
+offset_right = 175.0
+offset_bottom = 32.0
+size_flags_vertical = 3
+text = "Основная"
+
+[node name="Reserve Connection Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2i(175, 0)
+layout_mode = 2
+offset_left = 179.0
+offset_right = 354.0
+offset_bottom = 32.0
+size_flags_vertical = 3
+text = "Резервная"
+
+[node name="Content Container" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body"]
+layout_mode = 2
+offset_top = 72.0
+offset_right = 708.0
+offset_bottom = 428.0
+size_flags_vertical = 3
+
+[node name="Operator Panel" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container" node_paths=PackedStringArray("alarm_le_oc", "alarm_le_pressure", "alarm_le_liquid", "alarm_le_failure", "unlock_password_field", "block_button", "unlock_container", "open_button", "close_button", "alarm_button")]
+layout_mode = 2
+offset_right = 362.0
+offset_bottom = 356.0
+size_flags_horizontal = 3
+script = ExtResource("14_y0qcc")
+alarm_le_oc = NodePath("Operator Container/Information Container/Alarms Container/Alarm LE_OC")
+alarm_le_pressure = NodePath("Operator Container/Information Container/Alarms Container/Alarm LE_PRESSURE")
+alarm_le_liquid = NodePath("Operator Container/Information Container/Alarms Container/Alarm LE_LIQUID")
+alarm_le_failure = NodePath("Operator Container/Information Container/Alarms Container/Alarm LE_FAILURE")
+unlock_password_field = NodePath("Operator Container/Control Container/Unlock Container/Unlock Password Field")
+block_button = NodePath("Operator Container/Control Container/Block Button")
+unlock_container = NodePath("Operator Container/Control Container/Unlock Container")
+open_button = NodePath("Operator Container/Control Container/Open Button")
+close_button = NodePath("Operator Container/Control Container/Close Button")
+alarm_button = NodePath("Operator Container/Control Container/Reset Alarms Button")
+
+[node name="Operator Container" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel"]
+layout_mode = 2
+offset_right = 362.0
+offset_bottom = 356.0
+size_flags_horizontal = 3
+
+[node name="Information Container" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container"]
+layout_mode = 2
+offset_right = 362.0
+offset_bottom = 178.0
+size_flags_vertical = 3
+
+[node name="Indication Container" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container"]
+layout_mode = 2
+offset_right = 171.0
+offset_bottom = 178.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Indication Caption Container" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Indication Container"]
+custom_minimum_size = Vector2i(0, 34)
+layout_mode = 2
+offset_right = 171.0
+offset_bottom = 34.0
+
+[node name="Indication Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Indication Container/Indication Caption Container"]
+layout_mode = 2
+offset_right = 171.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+text = "Индикация"
+horizontal_alignment = 1
+
+[node name="Image Container" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Indication Container"]
+layout_mode = 2
+offset_top = 34.0
+offset_right = 171.0
+offset_bottom = 178.0
+size_flags_vertical = 3
+
+[node name="Image Control" type="Control" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Indication Container/Image Container"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 85.0
+offset_top = 72.0
+offset_right = 85.0
+offset_bottom = 72.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GTV Image" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Indication Container/Image Container/Image Control" instance=ExtResource("11_hlumh")]
+position = Vector2(-1, 14)
+scale = Vector2(0.35, 0.35)
+script = null
+
+[node name="Alarms Container" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container"]
+layout_mode = 2
+offset_left = 175.0
+offset_right = 362.0
+offset_bottom = 178.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Alarms Caption Container" type="Panel" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container"]
+custom_minimum_size = Vector2i(0, 34)
+layout_mode = 2
+offset_right = 187.0
+offset_bottom = 34.0
+
+[node name="Alarms Caption Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container/Alarms Caption Container"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ошибки"
+horizontal_alignment = 1
+
+[node name="Alarm LE_OC" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+offset_top = 34.0
+offset_right = 187.0
+offset_bottom = 60.0
+text = "Ошибка команды О./З."
+
+[node name="Alarm LE_PRESSURE" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+offset_top = 60.0
+offset_right = 187.0
+offset_bottom = 86.0
+text = "Ошибка давления"
+
+[node name="Alarm LE_LIQUID" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+offset_top = 86.0
+offset_right = 187.0
+offset_bottom = 112.0
+text = "Ошибка расхода ГЖ"
+
+[node name="Alarm LE_FAILURE" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Information Container/Alarms Container"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+offset_top = 112.0
+offset_right = 187.0
+offset_bottom = 138.0
+text = "Аварийное закрытие"
+autowrap_mode = 1
+
+[node name="Control Container" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container"]
+layout_mode = 2
+offset_top = 182.0
+offset_right = 362.0
+offset_bottom = 356.0
+size_flags_horizontal = 3
+
+[node name="Control Caption Container" type="ColorRect" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+layout_mode = 2
+offset_right = 362.0
+offset_bottom = 34.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Control Caption Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container/Control Caption Container"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Управление"
+horizontal_alignment = 1
+
+[node name="Open Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+layout_mode = 2
+offset_top = 38.0
+offset_right = 362.0
+offset_bottom = 69.0
+size_flags_vertical = 3
+text = "Открыть"
+
+[node name="Close Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+layout_mode = 2
+offset_top = 73.0
+offset_right = 362.0
+offset_bottom = 104.0
+size_flags_vertical = 3
+text = "Закрыть"
+
+[node name="Reset Alarms Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+layout_mode = 2
+offset_top = 108.0
+offset_right = 362.0
+offset_bottom = 139.0
+text = "Сбросить ошибки"
+
+[node name="Block Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+visible = false
+layout_mode = 2
+offset_top = 143.0
+offset_right = 353.0
+offset_bottom = 174.0
+size_flags_vertical = 3
+text = "Заблокировать"
+
+[node name="Unlock Container" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container"]
+layout_mode = 2
+offset_top = 143.0
+offset_right = 362.0
+offset_bottom = 174.0
+size_flags_vertical = 3
+
+[node name="Unlock Password Field" type="LineEdit" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container/Unlock Container"]
+layout_mode = 2
+offset_right = 216.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "password"
+secret = true
+
+[node name="Unlock Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container/Unlock Container"]
+layout_mode = 2
+offset_left = 220.0
+offset_right = 362.0
+offset_bottom = 31.0
+size_flags_vertical = 3
+text = "Разблокировать"
+
+[node name="Engineer Panel" type="PanelContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container" node_paths=PackedStringArray("pressure_open_field", "pressure_closed_field", "low_pressure_field", "time_open_field", "time_close_field", "remote_control_checkbox", "password_field")]
+layout_mode = 2
+offset_left = 366.0
+offset_right = 708.0
+offset_bottom = 356.0
+script = ExtResource("17_j8ho2")
+pressure_open_field = NodePath("GTV Setup Parameters Container/Parameter Pressure Open/Pressure Open Field")
+pressure_closed_field = NodePath("GTV Setup Parameters Container/Parameter Pressure Closed/Pressure Closed Field")
+low_pressure_field = NodePath("GTV Setup Parameters Container/Parameter Low Pressure/Low Pressure Field")
+time_open_field = NodePath("GTV Setup Parameters Container/Parameter Time Open/Time Open Field")
+time_close_field = NodePath("GTV Setup Parameters Container/Parameter Time Close/Time Close Field")
+remote_control_checkbox = NodePath("GTV Setup Parameters Container/Parameter Remote Control/Remote Checkbox")
+password_field = NodePath("GTV Setup Parameters Container/Parameter Password/Password Field")
+
+[node name="GTV Setup Parameters Container" type="VBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel"]
+custom_minimum_size = Vector2i(297, 0)
+layout_mode = 2
+offset_right = 342.0
+offset_bottom = 356.0
+theme_override_constants/separation = 0
+
+[node name="Setup Caption Container" type="ColorRect" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+layout_mode = 2
+offset_right = 342.0
+offset_bottom = 34.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Setup Caption Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Setup Caption Container"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Уставки"
+horizontal_alignment = 1
+
+[node name="Parameter Pressure Open" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 34.0
+offset_right = 342.0
+offset_bottom = 65.0
+
+[node name="Pressure Open Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Pressure Open"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Давление клапан открыт (МПа)"
+
+[node name="Pressure Open Field" type="SpinBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Pressure Open"]
+layout_mode = 2
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="Parameter Pressure Closed" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 65.0
+offset_right = 342.0
+offset_bottom = 96.0
+
+[node name="Pressure Closed Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Pressure Closed"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Давление клапан закрыт (МПа)"
+
+[node name="Pressure Closed Field" type="SpinBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Pressure Closed"]
+layout_mode = 2
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="Parameter Low Pressure" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 96.0
+offset_right = 342.0
+offset_bottom = 127.0
+
+[node name="Low Pressure Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Low Pressure"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Низкое давление (МПа)"
+
+[node name="Low Pressure Field" type="SpinBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Low Pressure"]
+layout_mode = 2
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="Parameter Time Open" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 127.0
+offset_right = 342.0
+offset_bottom = 158.0
+
+[node name="Time Open Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Time Open"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Время открытия (С)"
+
+[node name="Time Open Field" type="SpinBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Time Open"]
+layout_mode = 2
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="Parameter Time Close" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 158.0
+offset_right = 342.0
+offset_bottom = 189.0
+
+[node name="Time Close Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Time Close"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Время закрытия (С)"
+
+[node name="Time Close Field" type="SpinBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Time Close"]
+layout_mode = 2
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="Parameter Remote Control" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 189.0
+offset_right = 342.0
+offset_bottom = 215.0
+
+[node name="Remote Control Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Remote Control"]
+layout_mode = 2
+offset_right = 314.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+text = "Удаленный режим управления"
+
+[node name="Remote Checkbox" type="CheckBox" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Remote Control"]
+layout_mode = 2
+offset_left = 318.0
+offset_right = 342.0
+offset_bottom = 26.0
+
+[node name="Parameter Password" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 215.0
+offset_right = 342.0
+offset_bottom = 246.0
+
+[node name="Password Label" type="Label" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Password"]
+layout_mode = 2
+offset_top = 2.0
+offset_right = 114.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Пароль"
+
+[node name="Password Field" type="LineEdit" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameter Password"]
+custom_minimum_size = Vector2i(224, 0)
+layout_mode = 2
+offset_left = 118.0
+offset_right = 342.0
+offset_bottom = 31.0
+text = "<предыдущий пароль>"
+placeholder_text = "пароль"
+
+[node name="Parameters Control Container" type="HBoxContainer" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container"]
+layout_mode = 2
+offset_top = 246.0
+offset_right = 342.0
+offset_bottom = 277.0
+
+[node name="Load Setup Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameters Control Container"]
+layout_mode = 2
+offset_right = 169.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+text = "Считать"
+
+[node name="Save Setup Button" type="Button" parent="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameters Control Container"]
+layout_mode = 2
+offset_left = 173.0
+offset_right = 342.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+text = "Сохранить"
+
+[connection signal="success_login" from="StateMachine/Authentication/Authentication UI/LoginForm" to="StateMachine/Authentication" method="_on_login_form_success_login"]
+[connection signal="gui_input" from="StateMachine/Workplace/Control/GTVWindow/Background Window" to="StateMachine/Workplace/Control/GTVWindow" method="_on_background_window_gui_input"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer/HBoxContainer/Main Connection Button" to="StateMachine/Workplace/Control/GTVWindow" method="_on_main_connection_button_pressed"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Connection Container/HBoxContainer/HBoxContainer/Reserve Connection Button" to="StateMachine/Workplace/Control/GTVWindow" method="_on_reserve_connection_button_pressed"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container/Open Button" to="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel" method="_on_open_button_pressed"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel/Operator Container/Control Container/Reset Alarms Button" to="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Operator Panel" method="_on_reset_alarms_button_pressed"]
+[connection signal="load_button_pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel" to="StateMachine/Workplace/Control/GTVWindow" method="_on_engineer_panel_load_button_pressed"]
+[connection signal="save_button_pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel" to="StateMachine/Workplace/Control/GTVWindow" method="_on_engineer_panel_save_button_pressed"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameters Control Container/Load Setup Button" to="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel" method="_on_load_setup_button_pressed"]
+[connection signal="pressed" from="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel/GTV Setup Parameters Container/Parameters Control Container/Save Setup Button" to="StateMachine/Workplace/Control/GTVWindow/Background Window/Window Body/Content Container/Engineer Panel" method="_on_save_setup_button_pressed"]

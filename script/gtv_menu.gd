@@ -52,6 +52,7 @@ var setup_signals = {
 }
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
 	if Nw:
 		#connect to global Nw
 		Nw.connect("signalsUpdated", Callable(self, "signalsUpdated"))
@@ -182,6 +183,7 @@ func _on_b_setupwr_button_up():
 func _on_b_setuprd_button_up():
 	Log.usr("Чтение уставок для %s" % GID + "GTV" + index)
 	var nw: NordWind = NordWind.new()
+	print(GID + "GTV" + index)
 	nw.signalsByDict(GID + "GTV" + index, setup_signals,  nwSignal.DIR_READ)
 	if nw.srvConnect(Nw.ip, Nw.port):
 #		Log.log("Подключение к серверу")
@@ -201,3 +203,14 @@ func _on_b_setuprd_button_up():
 	nw.free()
 	#TODO: read setups
 	pass # Replace with function body.
+
+
+func _on_load_setup_button_pressed():
+	var id: String = "keka"
+	Log.usr("Чтение уставок для %s")
+	pass # Replace with function body.
+	
+	
+func _load_setups(device: Device):
+	var id: String = device.get_global_id()
+	Log.usr("Чтение уставок для %s" % id)

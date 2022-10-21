@@ -1,0 +1,432 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6mngj18hern0"]
+
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Devices/GTVWindow.gd" id="1_lfdbi"]
+[ext_resource type="PackedScene" uid="uid://bona8hf5t252s" path="res://gtv_img.tscn" id="2_gji6h"]
+
+[node name="GTVWindow" type="Control"]
+custom_minimum_size = Vector2i(600, 400)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
+script = ExtResource("1_lfdbi")
+
+[node name="Pfull_hider" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2i(600, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBhead_body" type="VBoxContainer" parent="Pfull_hider"]
+modulate = Color(0.972549, 0.972549, 0.972549, 1)
+custom_minimum_size = Vector2i(699, 428)
+offset_left = 226.0
+offset_top = 110.0
+offset_right = 925.0
+offset_bottom = 538.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title Container" type="PanelContainer" parent="Pfull_hider/VBhead_body"]
+offset_right = 699.0
+offset_bottom = 32.0
+
+[node name="Global Id Label" type="Label" parent="Pfull_hider/VBhead_body/Title Container"]
+custom_minimum_size = Vector2i(0, 32)
+offset_right = 699.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "GTV(ID)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GTV Window Container" type="HBoxContainer" parent="Pfull_hider/VBhead_body"]
+offset_top = 36.0
+offset_right = 699.0
+offset_bottom = 428.0
+size_flags_vertical = 3
+
+[node name="Operator Container" type="PanelContainer" parent="Pfull_hider/VBhead_body/GTV Window Container"]
+offset_right = 353.0
+offset_bottom = 392.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container"]
+offset_right = 353.0
+offset_bottom = 392.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer"]
+offset_right = 353.0
+offset_bottom = 214.0
+size_flags_vertical = 3
+
+[node name="Indic" type="VBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer"]
+offset_right = 162.0
+offset_bottom = 214.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/Indic"]
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 162.0
+offset_bottom = 34.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/Indic/PanelContainer"]
+offset_right = 162.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+text = "Индикация"
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/Indic"]
+offset_top = 34.0
+offset_right = 162.0
+offset_bottom = 214.0
+size_flags_vertical = 3
+
+[node name="Cadjust" type="Control" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/Indic/PanelContainer2"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 81.0
+offset_top = 90.0
+offset_right = 81.0
+offset_bottom = 90.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GTVimg" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/Indic/PanelContainer2/Cadjust" instance=ExtResource("2_gji6h")]
+position = Vector2(-1, 14)
+scale = Vector2(0.35, 0.35)
+script = null
+
+[node name="alarms" type="VBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer"]
+offset_left = 166.0
+offset_right = 353.0
+offset_bottom = 214.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms"]
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 187.0
+offset_bottom = 34.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms/Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ошибки"
+horizontal_alignment = 1
+
+[node name="LE_OC" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms"]
+modulate = Color(1, 0, 0, 1)
+offset_top = 34.0
+offset_right = 187.0
+offset_bottom = 60.0
+text = "Ошибка команды О./З."
+
+[node name="LE_PRESSURE" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms"]
+modulate = Color(1, 0, 0, 1)
+offset_top = 60.0
+offset_right = 187.0
+offset_bottom = 86.0
+text = "Ошибка давления"
+
+[node name="LE_LIQUID" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms"]
+modulate = Color(1, 0, 0, 1)
+offset_top = 86.0
+offset_right = 187.0
+offset_bottom = 112.0
+text = "Ошибка расхода ГЖ"
+
+[node name="LE_FAILURE" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/HBoxContainer/alarms"]
+modulate = Color(1, 0, 0, 1)
+offset_top = 112.0
+offset_right = 187.0
+offset_bottom = 138.0
+text = "Аварийное закрытие"
+autowrap_mode = 1
+
+[node name="rule" type="VBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer"]
+offset_top = 218.0
+offset_right = 353.0
+offset_bottom = 392.0
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 353.0
+offset_bottom = 34.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule/ColorRect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Управление"
+horizontal_alignment = 1
+
+[node name="BOpen" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+offset_top = 38.0
+offset_right = 353.0
+offset_bottom = 69.0
+size_flags_vertical = 3
+text = "Открыть"
+
+[node name="BClose" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+offset_top = 73.0
+offset_right = 353.0
+offset_bottom = 104.0
+size_flags_vertical = 3
+text = "Закрыть"
+
+[node name="BAlarms" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+offset_top = 108.0
+offset_right = 353.0
+offset_bottom = 139.0
+text = "Сбросить ошибки"
+
+[node name="BLock" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+visible = false
+offset_top = 143.0
+offset_right = 353.0
+offset_bottom = 174.0
+size_flags_vertical = 3
+text = "Заблокировать"
+
+[node name="HBUnlock" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule"]
+offset_top = 143.0
+offset_right = 353.0
+offset_bottom = 174.0
+size_flags_vertical = 3
+
+[node name="LEPass" type="LineEdit" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule/HBUnlock"]
+offset_right = 207.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "password"
+secret = true
+
+[node name="BUnlick" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule/HBUnlock"]
+offset_left = 211.0
+offset_right = 353.0
+offset_bottom = 31.0
+size_flags_vertical = 3
+text = "Разблокировать"
+
+[node name="Setup Container" type="PanelContainer" parent="Pfull_hider/VBhead_body/GTV Window Container"]
+offset_left = 357.0
+offset_right = 699.0
+offset_bottom = 392.0
+
+[node name="Setups" type="VBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container"]
+custom_minimum_size = Vector2i(297, 0)
+offset_right = 342.0
+offset_bottom = 392.0
+theme_override_constants/separation = 0
+
+[node name="Background Title" type="ColorRect" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+clip_contents = true
+custom_minimum_size = Vector2i(0, 34)
+offset_right = 342.0
+offset_bottom = 34.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Title Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/Background Title"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.0
+offset_top = -13.0
+offset_right = 29.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Уставки"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 34.0
+offset_right = 342.0
+offset_bottom = 65.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer"]
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Давление клапан открыт (МПа)"
+
+[node name="SBopensp" type="SpinBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer"]
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 65.0
+offset_right = 342.0
+offset_bottom = 96.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer2"]
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Давление клапан закрыт (МПа)"
+
+[node name="SBclosedsp1" type="SpinBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer2"]
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 96.0
+offset_right = 342.0
+offset_bottom = 127.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer3"]
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Низкое давление (МПа)"
+
+[node name="SBlow" type="SpinBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer3"]
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 127.0
+offset_right = 342.0
+offset_bottom = 158.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer4"]
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Время открытия (С)"
+
+[node name="SBtopen" type="SpinBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer4"]
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 158.0
+offset_right = 342.0
+offset_bottom = 189.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer5"]
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Время открытия (С)"
+
+[node name="SBtclose" type="SpinBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer5"]
+offset_left = 259.0
+offset_right = 342.0
+offset_bottom = 31.0
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 189.0
+offset_right = 342.0
+offset_bottom = 215.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer6"]
+offset_right = 314.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+text = "Удаленный режим управления"
+
+[node name="SBremote" type="CheckBox" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer6"]
+offset_left = 318.0
+offset_right = 342.0
+offset_bottom = 26.0
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 215.0
+offset_right = 342.0
+offset_bottom = 246.0
+
+[node name="Label" type="Label" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer7"]
+offset_top = 2.0
+offset_right = 114.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+text = "Пароль"
+
+[node name="LineEdit" type="LineEdit" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer7"]
+custom_minimum_size = Vector2i(224, 0)
+offset_left = 118.0
+offset_right = 342.0
+offset_bottom = 31.0
+text = "<предыдущий пароль>"
+placeholder_text = "пароль"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+offset_top = 246.0
+offset_right = 342.0
+offset_bottom = 277.0
+
+[node name="BSetuprd" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer8"]
+offset_right = 169.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+text = "Считать"
+
+[node name="BSetupwr" type="Button" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer8"]
+offset_left = 173.0
+offset_right = 342.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+text = "Сохранить"
+
+[node name="Control" type="Control" parent="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 277.0
+offset_right = 342.0
+offset_bottom = 277.0
+
+[connection signal="gui_input" from="Pfull_hider" to="." method="_on_pfull_hider_gui_input"]
+[connection signal="button_up" from="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule/BOpen" to="." method="_on_b_open_button_up"]
+[connection signal="button_up" from="Pfull_hider/VBhead_body/GTV Window Container/Operator Container/VBoxContainer/rule/BAlarms" to="." method="_on_b_alarms_button_up"]
+[connection signal="button_up" from="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer8/BSetuprd" to="." method="_on_b_setuprd_button_up"]
+[connection signal="button_up" from="Pfull_hider/VBhead_body/GTV Window Container/Setup Container/Setups/HBoxContainer8/BSetupwr" to="." method="_on_b_setupwr_button_up"]

@@ -30,7 +30,7 @@ script = ExtResource("1_ypcs0")
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
-color = Color(0.1591, 0.37, 0.37, 1)
+color = Color(0.160784, 0.368627, 0.368627, 1)
 
 [node name="user" type="Label" parent="main_container"]
 offset_right = 168.0

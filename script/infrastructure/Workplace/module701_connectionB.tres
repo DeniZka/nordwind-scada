@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cixj63vxi3yyj"]
+
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/ConnectionSettings.gd" id="1_4t5b6"]
+
+[resource]
+script = ExtResource("1_4t5b6")
+ip = "192.168.100.42"
+port = 22375

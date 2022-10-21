@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqrvpdvdyd2bm"]
+
+[ext_resource type="Script" path="res://script/infrastructure/UI/LoginForm.gd" id="1_2jmut"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_mlten"]
+action = &"ui_accept"
+
+[sub_resource type="Shortcut" id="Shortcut_bon0f"]
+events = [SubResource("InputEventAction_mlten")]
+
+[node name="LoginForm" type="Container" node_paths=PackedStringArray("username", "password", "invalid_password")]
+anchors_preset = -1
+anchor_left = 0.673
+anchor_top = 0.156
+anchor_right = 0.965
+anchor_bottom = 0.361
+grow_horizontal = 0
+script = ExtResource("1_2jmut")
+username = NodePath("Login Panel/User Name Field")
+password = NodePath("Login Panel/Password Field")
+invalid_password = NodePath("Invalid Password")
+metadata/_edit_use_anchors_ = true
+
+[node name="Login Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2i(308, 137)
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 296.0
+offset_bottom = 120.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="User Name Field" type="OptionButton" parent="Login Panel"]
+offset_left = 24.0
+offset_top = 48.0
+offset_right = 296.0
+offset_bottom = 88.0
+
+[node name="Password Field" type="LineEdit" parent="Login Panel"]
+offset_left = 24.0
+offset_top = 104.0
+offset_right = 216.0
+offset_bottom = 144.0
+placeholder_text = "пароль"
+secret = true
+virtual_keyboard_enabled = false
+virtual_keyboard_type = 6
+draw_control_chars = true
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="Login Button" type="Button" parent="Login Panel"]
+offset_left = 224.0
+offset_top = 104.0
+offset_right = 296.0
+offset_bottom = 144.0
+shortcut = SubResource("Shortcut_bon0f")
+text = "Войти"
+
+[node name="Invalid Password" type="Label" parent="."]
+modulate = Color(1, 0, 0, 1)
+offset_left = 6.0
+offset_top = 95.0
+offset_right = 158.0
+offset_bottom = 121.0
+text = "Пароль не верный"
+
+[node name="User Label" type="Label" parent="."]
+offset_top = -32.0
+offset_right = 115.0
+offset_bottom = -6.0
+text = "Пользователь"
+
+[connection signal="pressed" from="Login Panel/Login Button" to="." method="_on_login_button_pressed"]

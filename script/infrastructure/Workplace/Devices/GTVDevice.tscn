@@ -1,0 +1,101 @@
+[gd_scene load_steps=6 format=3 uid="uid://3hae3bfde7rk"]
+
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Devices/GTVDevice.gd" id="1_exaf2"]
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Devices/ValveAlarm.gd" id="2_id7sx"]
+[ext_resource type="Texture2D" uid="uid://b77hwkengo6v6" path="res://assets/light.png" id="3_wolko"]
+[ext_resource type="Script" path="res://script/infrastructure/Workplace/Devices/ValveGraphics.gd" id="4_mm8ly"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jbiyy"]
+radius = 104.0
+height = 320.0
+
+[node name="GTVDevice" type="Node2D"]
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_exaf2")
+ValveName = ""
+valve_graphics_node = NodePath("ValveGraphics")
+alarm_node = NodePath("ValveAlarm")
+
+[node name="Click Trigger" type="Area2D" parent="."]
+
+[node name="CollisionShape2d" type="CollisionShape2D" parent="Click Trigger"]
+position = Vector2(0, -32)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_jbiyy")
+
+[node name="ValveAlarm" type="Node2D" parent="." node_paths=PackedStringArray("light", "not_opened_label", "not_closed_label")]
+script = ExtResource("2_id7sx")
+light = NodePath("Alarm Light")
+not_opened_label = NodePath("Alarm Labels/Not Opened Label")
+not_closed_label = NodePath("Alarm Labels/Not Closed Label")
+
+[node name="Alarm Light" type="Sprite2D" parent="ValveAlarm"]
+visible = false
+modulate = Color(0.878431, 0, 1, 0.607843)
+position = Vector2(-2.74998, -27.75)
+scale = Vector2(0.59188, 0.59188)
+texture = ExtResource("3_wolko")
+
+[node name="Alarm Labels" type="Control" parent="ValveAlarm"]
+modulate = Color(0.84, 0, 0, 1)
+layout_mode = 3
+anchors_preset = 0
+offset_top = 155.0
+offset_right = 40.0
+offset_bottom = 195.0
+mouse_filter = 2
+
+[node name="Not Opened Label" type="Label" parent="ValveAlarm/Alarm Labels"]
+visible = false
+offset_left = -140.0
+offset_top = -44.9999
+offset_right = 156.0
+offset_bottom = 16.0001
+theme_override_font_sizes/font_size = 45
+text = "НЕ ОТКРЫТА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Not Closed Label" type="Label" parent="ValveAlarm/Alarm Labels"]
+visible = false
+offset_left = -140.0
+offset_top = -44.9999
+offset_right = 156.0
+offset_bottom = 16.0001
+theme_override_font_sizes/font_size = 45
+text = "НЕ ЗАКРЫТА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValveGraphics" type="Node2D" parent="." node_paths=PackedStringArray("left", "right")]
+script = ExtResource("4_mm8ly")
+left = NodePath("Left View")
+right = NodePath("Right View")
+
+[node name="Right View" type="Polygon2D" parent="ValveGraphics"]
+color = Color(0.745098, 0.745098, 0.745098, 1)
+polygon = PackedVector2Array(0, 0, 112, -64, 112, 64)
+
+[node name="Left View" type="Polygon2D" parent="ValveGraphics"]
+color = Color(0.745098, 0.745098, 0.745098, 1)
+polygon = PackedVector2Array(0, 0, -112, -64, -112, 64)
+
+[node name="Top View" type="Polygon2D" parent="ValveGraphics"]
+color = Color(0.745098, 0.745098, 0.745098, 1)
+polygon = PackedVector2Array(-48, -64, -48, -128, 48, -128, 48, -64)
+
+[node name="Outline" type="Line2D" parent="ValveGraphics"]
+points = PackedVector2Array(0, 0, -112, -64, -112, 64, 0, 0, 112, 64, 112, -64, 0, 0, 0, -64, 48, -64, 48, -128, -48, -128, -48, -64, 0, -64, 0, 64)
+default_color = Color(0, 0, 0, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 2.81
+antialiased = true
+
+[node name="Details" type="Line2D" parent="ValveGraphics"]
+position = Vector2(0, 32)
+points = PackedVector2Array(-48, -128, -24, -128, -24, -96, -24, -128, 0, -128, 24, -128, 48, -128, 24, -128, 24, -96)
+default_color = Color(0, 0, 0, 1)
+
+[connection signal="input_event" from="Click Trigger" to="." method="_on_click_trigger_input_event"]

@@ -107,7 +107,7 @@ func signalsUpdated():
 			not_opened.visible = true
 		if $top.color == clr_close:
 			not_closed.visible = true
-			
+	
 	if has_node(\"Label\"):
 		$Label.locked = signals[\"interlock\"].getBool()
 	
