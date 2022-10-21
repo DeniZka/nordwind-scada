@@ -1,7 +1,7 @@
 @tool
 extends Device
 
-var vlvName = ""
+var vlvName = "GTV"
 @export var ValveName = "GTV":
 	get:
 		return vlvName
@@ -31,36 +31,8 @@ enum {MD_MANUAL, MD_REMOTE}
 signal show_gtv_menu 
 signal show_menu(device: Device)
 
-var GID = "701" #FIXME: GET CORRECT GID
-
 #read self global signals
 var signals = {
-	"open_rem": null,  #сигнал открытия дошел
-	"close_rem": null, #сигнал закрытия дошел
-	"open": null,      #открыт
-	"closed": null,    #акрыт
-	"oc_alarm": null,  #не открылся
-	"pm_alarm": null,  #не перерасход жидкости
-	"remote": null,
-	#preload other needed signal for opening menu pre ready signals
-	"interlock": null
-	#TODO: complete list
-}
-
-var signals1 = {
-	"open_rem": null,  #сигнал открытия дошел
-	"close_rem": null, #сигнал закрытия дошел
-	"open": null,      #открыт
-	"closed": null,    #акрыт
-	"oc_alarm": null,  #не открылся
-	"pm_alarm": null,  #не перерасход жидкости
-	"remote": null,
-	#preload other needed signal for opening menu pre ready signals
-	"interlock": null
-	#TODO: complete list
-}
-
-var signals2 = {
 	"open_rem": null,  #сигнал открытия дошел
 	"close_rem": null, #сигнал закрытия дошел
 	"open": null,      #открыт
@@ -77,13 +49,10 @@ func get_global_id() -> String:
 	return module_id + vlvName + index
 	
 func _get_signals() -> Dictionary:
-	return signals1
-	
-func _get_signals2() -> Dictionary:
-	return signals2
+	return signals
 	
 func _on_signals_updated(id: int) -> void:
-	#signalsUpdated()
+	signalsUpdated()
 	pass
 		
 func signalsUpdated():

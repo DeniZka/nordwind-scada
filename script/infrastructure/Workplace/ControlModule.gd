@@ -45,6 +45,7 @@ func write(data: Dictionary, id: String, connection_id: int = 0) -> void:
 
 func read(data: Dictionary, id: String, connection_id: int = 0) -> void:
 	Log.usr("Чтение уставок для %s" % id)
+	print(id + ";" + str(connection_id))
 	var connection = moduleData.get_connection(connection_id)
 	_exchange(data, id, connection.ip, connection.port, nwSignal.DIR_READ)	
 	pass

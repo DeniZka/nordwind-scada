@@ -163,18 +163,21 @@ text = "NordWind Reserve
 "
 vertical_alignment = 1
 
-[node name="GTVDevice" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
-position = Vector2(563, 358)
+[node name="GTVDevice 001" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
+position = Vector2(609, 325)
 
-[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice" instance=ExtResource("12_t0l4f")]
-position = Vector2(-0.000244141, -195)
+[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice 001" instance=ExtResource("12_t0l4f")]
+position = Vector2(0, -240)
+scale = Vector2(1, 1)
 mode = "Р"
 
-[node name="GTVDevice2" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
-position = Vector2(435, 358)
+[node name="GTVDevice 002" parent="StateMachine/Workplace/Control/Subsea Control Module 701" instance=ExtResource("11_oe0nf")]
+position = Vector2(451, 325)
+index = "002"
 
-[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice2" instance=ExtResource("12_t0l4f")]
-position = Vector2(-0.000244141, -195)
+[node name="Label" parent="StateMachine/Workplace/Control/Subsea Control Module 701/GTVDevice 002" instance=ExtResource("12_t0l4f")]
+position = Vector2(0, -240)
+scale = Vector2(1, 1)
 mode = "Р"
 
 [node name="GTVWindow" type="Control" parent="StateMachine/Workplace/Control" node_paths=PackedStringArray("caption_label", "connection_id_label")]

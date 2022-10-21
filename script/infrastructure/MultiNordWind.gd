@@ -30,9 +30,9 @@ func connect_to_server() -> void:
 	connect_all()
 	pass
 	
-func signals_by_dict(id: String, signals1: Dictionary, signals2: Dictionary, direction: Variant) -> void:
-	first_nord_wind.signalsByDict(id, signals1, direction)
-	second_nord_wind.signalsByDict(id, signals2, direction)
+func signals_by_dict(id: String, signals: Dictionary, direction: Variant) -> void:
+	first_nord_wind.signalsByDict(id, signals, direction)
+	second_nord_wind.signalsByDict(id, signals, direction)
 	pass
 	
 static func _connect_to_server(nord_wind: NordWind, connection: ConnectionSettings, initialization: String, id: int) -> void:
@@ -55,13 +55,11 @@ func process(delta: float) -> void:
 	pass
 	
 func send_exchange() -> void:
-	print("SEND EXCHANGE!")
 	first_nord_wind.sendExchnge()
 	second_nord_wind.sendExchnge()
 	
 	print("NORDWIND #0 connection: " + str(first_nord_wind.srvConnected()))
 	print("NORDWIND #1 connection: " + str(second_nord_wind.srvConnected()))
-	
 	pass
 	
 func connect_all() -> void:
