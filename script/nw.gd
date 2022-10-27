@@ -36,6 +36,8 @@ const DAT_ARCHIVE_INFO = 11
 const DAT_ARCHIVE_DATA = 12
 const DAT_ARCHIVE_EVENTS = 13
 
+enum {ARCH_MODE_TIME, ARCH_MODE_INDEX}
+
 #NordWind settings response
 var step = 0.0
 var connection_time = 0.0
@@ -203,6 +205,7 @@ func sendInitialization(algo: String):
 
 	var res_l = cli.get_u32()
 	if res_l != 5:
+		cli.get_data(res_l)
 		print("Nordwind connection Initialization Error")
 		return [-1, -1]
 	var res: PackedByteArray = cli.get_data(res_l)[1]
@@ -387,6 +390,7 @@ func sendCommand(cmd = CMD_PLAY):
 	else:
 		return true #no error
 
+#works only with GDBServer
 #Send write writeable signals and read readable signals
 func sendExchnge():
 	if not self.srvConnected():
@@ -531,7 +535,6 @@ func sendGetAvailableVarList():
 func sendGetArchiveInfo():
 	if not self.srvConnected():
 		return false
-	
 	var size = 0
 	var data = PackedByteArray()
 	var offset = 0
@@ -546,20 +549,117 @@ func sendGetArchiveInfo():
 	data.encode_u32(0, data.size() - HEADER_SIZE)
 	cli.put_data(data)
 	
-	return false #FIXME: read response
+#	return false #FIXME: read response
 		
+	
 	var l = cli.get_u32()
+	#in useconds
 	ar_start_time = cli.get_double()
 	ar_end_time = cli.get_double()
 	ar_points = cli.get_u64()
 	return [ar_start_time, ar_end_time, ar_points]
 	
+#cause of Nw uses us timestamp so we need to remove precision 
+func timeStampToDict(datetime: float):
+	return Time.get_datetime_dict_from_unix_time(int(ar_start_time/1000000))
 	
-func sendGetArchiveData():
+func dictToTimeStamp(datetime: Dictionary):
+	return float(Time.get_unix_time_from_datetime_dict(datetime) * 1000000)
+	
+#start - point index or time 
+func sendGetArchiveData(start, time_range, pt_cnt: int, amode: int = ARCH_MODE_TIME):
 	if not self.srvConnected():
 		return false
 		
-	pass
+	const SIGNAL_STATUS_VALID = 0
+	const SIGNAL_STATUS_EMPTY = 6
+		
+	var size = 0
+	var data = PackedByteArray()
+	var offset = 0
+	const START_SIZE = 8
+	const MODE_SIZE = 4
+	const COUNT_SIZE  = 4
+	const RANGE_SIZE = 8
+	
+	#no string size
+	data.resize(HEADER_SIZE + OP_SIZE + START_SIZE + MODE_SIZE + COUNT_SIZE + RANGE_SIZE)
+	offset += HEADER_SIZE
+	data.encode_u8(offset, DAT_ARCHIVE_DATA)
+	offset += OP_SIZE
+	data.encode_double(offset, start)
+	offset += START_SIZE
+	data.encode_u32(offset, amode)
+	offset += MODE_SIZE
+	data.encode_u32(offset, pt_cnt)
+	offset += COUNT_SIZE
+	data.encode_double(offset, time_range)
+	offset += RANGE_SIZE
+	#header
+	data.encode_u32(0, data.size() - HEADER_SIZE)
+	cli.put_data(data)
+	
+	#retreive data
+	const PACKED_DATALEN_SIZE = 4
+	var data_len = cli.get_u32()
+	if data_len <= 4: #skip empty
+		return null
+	var packed_data_size = cli.get_u32()
+	data_len -= PACKED_DATALEN_SIZE
+	
+	var packed_data = PackedByteArray(cli.get_data(data_len)[1])
+	if packed_data_size > 0:
+		data = packed_data.decompress(packed_data_size, FileAccess.COMPRESSION_DEFLATE)
+	else:
+		data = packed_data
+		
+	#TODO: checkout buffer overflow
+	
+	#read unpacked data
+	offset = 0
+	var pt_count = data.decode_u32(offset)
+	offset += 4
+	
+	#read point timestamp
+	var pt_ts: float = 0
+	for i in range(pt_count):
+		#get point timestamp
+		pt_ts = data.decode_double(offset)
+		offset += 8
+		for s in self.sigs[0]: #list only read signals
+			#skip invalid signal
+			if s.type == nwSignal.INVALID_SIGNAL:
+				continue
+			#read values
+			var pt_data = {"vals": [], "time": null, "status": null}
+			
+			pt_data["time"] = data.decode_double(offset)
+			offset += 8
+			
+			match s.type:
+				nwSignal.FLOAT64:
+					for si in range(s.vals.size()):
+						pt_data["vals"].append( data.decode_double(offset) )
+						offset += 8
+				nwSignal.CHAR8:
+					for si in range(s.vals.size()):
+						pt_data["vals"].append( data.decode_u8(offset) )
+						offset += 1
+				nwSignal.INT32:
+					for si in range(s.vals.size()):
+						pt_data["vals"].append( data.decode_s32(offset) )
+						offset += 4
+			
+			pt_data["status"] = data.decode_u32(offset)
+			offset += 4
+			
+			if pt_data["status"] != SIGNAL_STATUS_EMPTY:  #seems 6 is empty data point
+				#put history in signal by timestamp
+				s.story[pt_ts] = pt_data
+				
+	if data.size() > offset:
+		print("LEAST LEN:", data.size() - offset, " DATA: ", data.decode_u32(offset))
+	
 	
 func sendGetArchiveEvents():
 	if not self.srvConnected():

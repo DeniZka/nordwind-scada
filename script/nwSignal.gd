@@ -22,6 +22,9 @@ var caption = ""
 var io_mode = IO_UNKNOWN
 var classified = CLSS_UNKNOWN
 
+# archive data, the key is a point datetimestamp
+var story = {}
+
 func resize():
 	var tot_dim = dims[0]	
 	if dims[1] > 0:
@@ -96,4 +99,11 @@ func valsSize():
 		FLOAT64: return vals.size() * 8
 		CHAR8: return vals.size() 
 		INT32: return vals.size() * 4
+		INVALID_SIGNAL: return 0
+		
+func valSize():
+	match self.type:
+		FLOAT64: return 8
+		CHAR8: return 1
+		INT32: return 4
 		INVALID_SIGNAL: return 0
